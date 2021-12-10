@@ -49,8 +49,12 @@ session_start();
 			echo 'Invalid username or password';
 		}
 		else{
-			$_SESSION['waaheen_user_id'] = $auth;
-			echo 'Login Successfully';
+			if ($_SESSION['waaheen_user_id'] == 0) {
+				$_SESSION['waaheen_user_id'] = $auth;
+				echo 'Login Successfully';
+			} else {
+				echo 'Already Logged-in!, <a href="signOut.php" class="fw-bold">LogOut</a> First and try again';
+			}
 		}
 	}
 

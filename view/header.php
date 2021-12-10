@@ -296,5 +296,3 @@ if (!$_SESSION['waaheen_user_id']) {
     </nav>
 
     
-
-    

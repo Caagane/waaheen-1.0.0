@@ -7,6 +7,7 @@ CREATE TABLE users (
     phone int(50) NOT NULL,
     email varchar(225),
     password varchar(225),
+    image varchar(225),
     type varchar(225),
     login_type varchar(25),
     last_date date NOT NULL,

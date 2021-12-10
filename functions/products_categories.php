@@ -107,16 +107,19 @@ session_start();
 		$categorysProducts = $Products_Categories_obj->display_categories_products($categories,$com_id); 
 		foreach ($categorysProducts as $categorysProduct) {
 			?>
-				<div class="col-md-3 col-sm-12 px-1">
-                    <div class="border radius light-bg  text-dark p-4 product">
-                        <div class="product-img" style="background-image: url('./img/asset/products.png')"></div>
-                        <h5 class="mt-2"><?php echo $categorysProduct['p_name']; ?></h5>
-                        <h6><?php echo $categorysProduct['p_price']; ?></h6>
-						<div class="my-2">
-							<button class="btn btn-warninng w-100 text-center">Order Noe</button>
-						</div>
-                    </div>
-                </div>
+			<div class="col-md-3 col-sm-12 px-1">
+				<div class="border radius light-bg  text-dark p-4 product">
+						<div class="product-img" style="background-image: url('./img/products/<?php echo $categorysProduct['p_img']; ?>')"></div>
+                        <h5 class="mt-2" id="p_name<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_name']; ?></h5>
+                        <h5 style="display:none" class="mt-2" id="p_desc<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_desc']; ?></h5>
+                        <h5 style="display:none" class="mt-2" id="p_category<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['category']; ?></h5>
+                        <h6 id="p_price<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_price']; ?></h6>
+					<div class="my-2 d-flex">
+						<button class="btn btn-warning w-100 text-center me-1 edit" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-sync"></i> Edit</button>
+						<button class="btn btn-danger w-100 text-center ms-1 delete" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-trash"></i> Delete</button>
+					</div>
+				</div>
+			</div>
 			<?php
 		}
 
@@ -126,51 +129,118 @@ session_start();
 	if(isset($_POST['lastProducts'])){
 		$com_id = $_POST['com_id'];
 		$categorysProducts = $Products_Categories_obj->lastProducts($com_id); 
-		foreach ($categorysProducts as $categorysProduct) {
+		if (!$categorysProducts) {
 			?>
-				<div class="col-md-3 col-sm-12 px-1">
-                    <div class="border radius light-bg  text-dark p-4 product">
-                        <div class="product-img" style="background-image: url('./img/asset/products.png')"></div>
-                        <h5 class="mt-2" id="p_name<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_name']; ?></h5>
-                        <h5 style="display:none" class="mt-2" id="p_desc<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_desc']; ?></h5>
-                        <h5 style="display:none" class="mt-2" id="p_category<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['category']; ?></h5>
-                        <h6 id="p_price<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_price']; ?></h6>
-						<div class="my-2 d-flex">
-							<button class="btn btn-warning w-100 text-center me-1 edit" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-sync"></i> Edit</button>
-							<button class="btn btn-danger w-100 text-center ms-1 delete" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-trash"></i> Delete</button>
-						</div>
-                    </div>
-                </div>
+				<i class="fa fa-gift mt-5" style="font-size: 80px;"></i>
+				<h3>There is No Product!, Add one!</h3>
 			<?php
+		} else {
+			foreach ($categorysProducts as $categorysProduct) {
+				?>
+					<div class="col-md-3 col-sm-12 px-1">
+						<div class="border radius light-bg  text-dark p-4 product">
+							<div class="product-img" style="background-image: url('./img/products/<?php echo $categorysProduct['p_img']; ?>')"></div>
+							<h5 class="mt-2" id="p_name<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_name']; ?></h5>
+							<h5 style="display:none" class="mt-2" id="p_desc<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_desc']; ?></h5>
+							<h5 style="display:none" class="mt-2" id="p_category<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['category']; ?></h5>
+							<h6 id="p_price<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_price']; ?></h6>
+							<div class="my-2 d-flex">
+								<button class="btn btn-warning w-100 text-center me-1 edit" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-sync"></i> Edit</button>
+								<button class="btn btn-danger w-100 text-center ms-1 delete" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-trash"></i> Delete</button>
+							</div>
+						</div>
+					</div>
+				<?php
+			}
 		}
 
 	}
 
+	
+	// Search Products in Search Page
+	if(isset($_POST['SearchProduct'])){
+		$search = $_POST['search'];
+		$dist = $_POST['dist'];
+		$SearchProducts = $Products_Categories_obj->search_products($search,$dist); 
+		if ($SearchProducts) {
+			foreach ($SearchProducts as $SearchProduct) {
+				?>
+					<div class="col-md-3 col-sm-12 px-1">
+						<div class="border radius light-bg  text-dark p-4 product">
+							<div class="d-flex text-start">
+								<?php
+									if ($SearchProduct['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $SearchProduct['image']; ?>')"></div>
+										<?php
+									}
+									?>
+								<div class="px-2 ">
+									<h6><?php echo $SearchProduct['f_name'].' '.$SearchProduct['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+								</div>
+							</div>
+							<div class="product-img" style="background-image: url('./img/products/<?php echo $SearchProduct['p_img']; ?>')"></div>
+							<h5 class="mt-2" id="p_name<?php echo $SearchProduct['id']; ?>"><?php echo $SearchProduct['p_name']; ?></h5>
+							<h5 style="display:none" class="mt-2" id="p_desc<?php echo $SearchProduct['id']; ?>"><?php echo $SearchProduct['p_desc']; ?></h5>
+							<h5 style="display:none" class="mt-2" id="p_category<?php echo $SearchProduct['id']; ?>"><?php echo $SearchProduct['category']; ?></h5>
+							<h6 id="p_price<?php echo $SearchProduct['id']; ?>"><?php echo $SearchProduct['p_price']; ?></h6>
+							<div class="my-2">
+								<button class="btn btn-primary custom-color w-100 text-center">Order Now</button>
+							</div>
+						</div>
+					</div>
+				<?php
+			}
+		}
+
+	}
 
 	// Trending Products in Local Area
 	if(isset($_POST['localProducts'])){
-		$categories = $_POST['categories'];
-		$categorysProducts = $Products_Categories_obj->localProducts($categories); 
-		foreach ($categorysProducts as $categorysProduct) {
+		// $categories = $_POST['categories'];
+		$allLocalProducts = $Products_Categories_obj->localProducts(); 
+		if (!$allLocalProducts) {
 			?>
-				<div class="col-md-3 col-sm-12 px-1">
-                    <div class="border radius light-bg  text-dark p-4 product">
-                        <div class="d-flex text-start">
-                            <div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $categorysProduct['p_img']; ?>')"></div>
-                            <div class="px-2 ">
-                                <h6><?php echo $categorysProduct['p_name']; ?></h6>
-                                <p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
-                            </div>
-                        </div>
-                        <div class="product-img" style="background-image: url('./img/asset/products.png')"></div>
-                        <h5 class="mt-2"><?php echo $categorysProduct['p_name']; ?></h5>
-                        <h6><?php echo $categorysProduct['p_price']; ?></h6>
-                        <button class="btn btn-primary custom-color w-100 text-center">Order Noe</button>
-                    </div>
-                </div>
+			<i class="fa fa-gifts" style="font-size:100px;"></i>
+			<h3> There is no Products in Your Local Area !!!</h3>
 			<?php
-		}
+		} else{
+			foreach ($allLocalProducts as $theLocalProduct) {
+				?>
+					<div class="col-md-3 col-sm-12 px-1">
+						<div class="border radius light-bg  text-dark p-4 product">
+							<div class="d-flex text-start">
+								<?php
+									if ($theLocalProduct['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $theLocalProduct['image']; ?>')"></div>
+										<?php
+									}
+								?>
+								<div class="px-2 ">
+									<h6><?php echo $theLocalProduct['f_name'].' '. $theLocalProduct['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+								</div>
+							</div>
+							<div class="product-img" style="background-image: url('./img/products/<?php echo $theLocalProduct['p_img']; ?>')"></div>
+							<h5 class="mt-2"><?php echo $theLocalProduct['p_name']; ?></h5>
+							<h6><?php echo $theLocalProduct['p_price']; ?></h6>
 
+							<a href="products-details.php?comid=<?php echo $theLocalProduct['com_id']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+						</div>
+					</div>
+				<?php
+			}
+		}
 	}
 	
 

@@ -1,17 +1,5 @@
 
-<!-- 
-      <div class="modal fade" id="loginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog w-100">
-            <div class="modal-content">
-                <div style="background: transparent" class="modal-body" style="background: transparent">
-                    <?php 
-                        // include('./signin.php') 
-                    ?>
-                </div>
-            </div>
-          </div>
-      </div> -->
-
+    
 
 <!-- fontawsome -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>

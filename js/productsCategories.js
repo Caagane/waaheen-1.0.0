@@ -1,4 +1,3 @@
-
 // Fetch all categories
 // Feting all products's categories 
 function allCategories(){
@@ -34,6 +33,23 @@ function lastProducts(){
 }
 
 
+// Products in User's Local Area
+function localProducts(){
+    // $com_id = $('#dashboard_com_id').val();
+    // alert($categories);
+    $.ajax({
+        type: 'POST',
+        url: 'functions/products_categories.php',
+        data: {
+            // com_id: $com_id,
+            localProducts: 1
+        },
+        success:function(data){
+            $('#localProducts').html(data);
+        }
+    });
+}
+
 
 $(document).ready(function () {
     
@@ -42,6 +58,8 @@ $(document).ready(function () {
     lastProducts();
     // 
 
+	// Call Local Products fun
+	localProducts();
 
     // Category
     // $('#add').click(function (event) {
@@ -51,12 +69,11 @@ $(document).ready(function () {
 		var category = $('#category').val();
 		var com_id = $('#com_id').val();
 		if(p_name !='' && p_desc !='' && p_price !='' && category !='' && com_id !=''){
-			// var categoryData = $('#categoryData').serialize();
-            var categoryData = new FormData(this.form);
+            var addProductForm = new FormData(this.form);
 			$.ajax({
 				type: 'POST',
                 url: 'functions/products_categories.php',
-				data: categoryData,
+				data: addProductForm,
                 contentType: false,
                 cache: false,
                 processData: false,
@@ -68,6 +85,7 @@ $(document).ready(function () {
                         lastProducts();
                     } else {
                         document.getElementById('add_p_msg').style.color = 'red';
+						$('#addProductForm')[0].reset();
                         $('#add_p_msg').html(response);
                     }
 				}
@@ -82,7 +100,7 @@ $(document).ready(function () {
     $('#filterProducts').click(function(){
 		$categories = $('#categories').val();
 		$com_id = $('#dashboard_com_id').val();
-		if(categories!=''){
+		if($categories!=''){
             // alert($categories);
             $.ajax({
                 type: 'POST',
@@ -156,6 +174,28 @@ $(document).ready(function () {
 			}
 		});
 	});
+	
+
+	// Serch Product in Search Page
+    $('#searchBtn').click(function(){
+		$search = $('#search').val();
+		$dist = $('#dist').val();
+		if($search !=''){
+            $.ajax({
+                type: 'POST',
+                url: 'functions/products_categories.php',
+                data: {
+                    search: $search,
+                    dist: $dist,
+                    SearchProduct: 1
+                },
+                success:function(data){
+                    $('#searchResult').html(data);
+                }
+            });
+		}
+	});
+
 
 });
 

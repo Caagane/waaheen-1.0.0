@@ -55,7 +55,7 @@
                 </div>
                 <div class="modal-body">
 				<div class="container-fluid">
-				<form id="categoryData">
+				<form id="addProductForm">
 					<div class="row">
 						<div class="col-md-12">
 							<label class="control-label py-2">Product Name:</label>

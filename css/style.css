@@ -151,6 +151,26 @@ body {
     border-radius: 10px;
 }
 
+/* product view */
+.product-view-img{
+    width: 100%;
+    height: 300px;
+    /* background: #ffffffad; */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.product-view-imgs{
+    width: 100%;
+    height: 80px;
+    margin: 5px;
+    /* background: #ffffffad; */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
 
 /* Related Users Style */
 .near-com-wrapper {
@@ -269,7 +289,7 @@ a {
 /* ============ RESPONSIVE DESIGN =============== */
 
 @media (max-width: 1000px) {  
-    
+
     .container {
         padding: 0;
         margin: 0;

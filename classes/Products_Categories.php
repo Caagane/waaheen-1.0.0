@@ -57,7 +57,6 @@ class Products_Categories extends DbConnection{
     {
         $com_id = $this->con->real_escape_string($com_id);
         $query = "SELECT DISTINCT (category) FROM products  where com_id = '$com_id' ORDER BY `products`.`category` ASC";
-        // $query = "SELECT * FROM products where com_id = '$com_id' ORDER BY `products`.`category` ASC";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -74,7 +73,6 @@ class Products_Categories extends DbConnection{
     public function display_categories_products($categories,$com_id)
     {
         $categories = $this->con->real_escape_string($categories);
-        // $query = "SELECT DISTINCT (category) FROM products  where com_id = '$com_id'";
         $query = "SELECT * FROM products where category = '$categories' and com_id = '$com_id' ORDER BY `products`.`id` desc";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
@@ -92,7 +90,6 @@ class Products_Categories extends DbConnection{
     public function lastProducts($com_id)
     {
         $com_id = $this->con->real_escape_string($com_id);
-        // $query = "SELECT DISTINCT (category) FROM products  where com_id = '$com_id'";
         $query = "SELECT * FROM products where com_id = '$com_id' ORDER BY `products`.`id` desc limit 8";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
@@ -102,9 +99,43 @@ class Products_Categories extends DbConnection{
             }
             return $data;
         }else if($result->num_rows == 0){
-            echo "There is No Product!, Add one!";
+            return false;
         }
     }
 
+    // All Peoducts in Local Area
+    public function localProducts()
+    {
+        // $com_id = $this->con->real_escape_string($com_id);
+        $query = "SELECT * FROM `products` left join users on products.com_id=users.id ORDER BY `products`.`id` DESC limit 8";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
+    // Search Products 
+    public function search_products($search,$dist)
+    {
+        $search = $this->con->real_escape_string($search);
+        $query = "SELECT * FROM `products` left join users on products.com_id=users.id WHERE f_name LIKE '%".$search."%' OR l_name LIKE '%".$search."%' OR p_name LIKE '%".$search."%' OR p_desc LIKE '%".$search."%'  OR category LIKE '%".$search."%' ORDER BY `products`.`id` desc";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            echo "No Result Founded!";
+            return false;
+        }
+    }
     
 }
