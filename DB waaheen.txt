@@ -34,20 +34,11 @@ CREATE TABLE carts (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
     p_id int(50),
     client_id int(50),
+    quantity int(50),
     create_at DATE DEFAULT now(),
     update_at DATE DEFAULT now(),
     FOREIGN KEY (p_id)  references products (id) on delete cascade,
     FOREIGN KEY (client_id)  references users (id) on delete cascade
-);
-CREATE TABLE products_comments (
-    id int(50) PRIMARY KEY AUTO_INCREMENT,
-    p_id int(50),
-    user_id int(50),
-    comment varchar(225),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
-    FOREIGN KEY (p_id)  references products (id) on delete cascade,
-    FOREIGN KEY (user_id)  references users (id) on delete cascade
 );
 CREATE TABLE products_likes (
     id int(50) PRIMARY KEY AUTO_INCREMENT,

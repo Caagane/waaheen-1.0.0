@@ -1,37 +1,134 @@
 // Fetch all categories
 // Feting all products's categories 
 function allCategories(){
-    $com_id = $('#dashboard_com_id').val();
-    $.ajax({
-        type: 'POST',
-        url: 'functions/products_categories.php',
-        data: {
-            com_id: $com_id,
-            fetchCategories: 1
-        },
-        success:function(data){
-            $('#categories').html(data);
-        }
-    });
+    $dashboard_com_id = $('#dashboard_com_id').val();
+    if ($dashboard_com_id !="") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                com_id: $dashboard_com_id,
+                fetchCategories: 1
+            },
+            success:function(data){
+                $('#categories').html(data);
+            }
+        });
+    }
 }
 
 // Fetch latest 8 product
 function lastProducts(){
-    $com_id = $('#dashboard_com_id').val();
+    $dashboard_com_id = $('#dashboard_com_id').val();
     // alert($categories);
-    $.ajax({
-        type: 'POST',
-        url: 'functions/products_categories.php',
-        data: {
-            com_id: $com_id,
-            lastProducts: 1
-        },
-        success:function(data){
-            $('#categorysProducts').html(data);
-        }
-    });
+    if ($dashboard_com_id != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                com_id: $dashboard_com_id,
+                lastProducts: 1
+            },
+            success:function(data){
+                $('#categorysProducts').html(data);
+            }
+        });
+    }
 }
 
+// Related Products in Product Details page
+function relatedProducts(){
+    $com_id = $('#com_id').val();
+    $product_id = $('#product_id').val();
+    $productCategory = $('#productCategory').val();
+    if ($com_id != "" && $productCategory != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                com_id: $com_id,
+                product_id: $product_id,
+                productCategory: $productCategory,
+                relatedProducts: 1
+            },
+            success:function(data){
+                $('#relatedProducts').html(data);
+            }
+        });
+    }
+}
+
+// display if orderd already or not
+function orderResult(){
+    $userid = $('#userid').val();
+    $product_id = $('#product_id').val();
+    if ($product_id != "" && $userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                userid: $userid,
+                product_id: $product_id,
+                orderResult: 1
+            },
+            success:function(response){
+                if (response === 'false') {
+                    document.getElementById('addOrder').style.display = 'block';
+                    document.getElementById('deleteOrder').style.display = 'none';
+                } else {
+                    document.getElementById('addOrder').style.display = 'none';
+                    document.getElementById('deleteOrder').style.display = 'block';
+                }
+            }
+        });
+    }
+}
+
+// product likes 
+function ProductlikesResult(){
+    $userid = $('#userid').val();
+    $product_id = $('#product_id').val();
+    if ($product_id != "" && $userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                userid: $userid,
+                product_id: $product_id,
+                likesResult: 1
+            },
+            success:function(response){
+                ProductLikesCounter()
+                if (response === 'false') {
+                    document.getElementById('addProductLike').style.display = 'block';
+                    document.getElementById('deleteProductLike').style.display = 'none';
+                } else {
+                    document.getElementById('addProductLike').style.display = 'none';
+                    document.getElementById('deleteProductLike').style.display = 'block';
+                }
+            }
+        });
+    }
+}
+
+// product like counter
+function ProductLikesCounter(){
+    $product_id = $('#product_id').val();
+    if ($product_id != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                product_id: $product_id,
+                ProductLikesCounter: 1
+            },
+            success:function(response){
+                $('#allProductLikes1').html(response);
+                $('#allProductLikes2').html(response);
+            }
+        });
+    }
+}
 
 // Products in User's Local Area
 function localProducts(){
@@ -57,9 +154,16 @@ $(document).ready(function () {
     allCategories();
     lastProducts();
     // 
-
+    //if Product ordered or not
+    orderResult();
+    // products likes
+    ProductlikesResult();
+    // product likes COUNTER
+    ProductLikesCounter()
 	// Call Local Products fun
 	localProducts();
+    // Related Products in Product Details page 
+    relatedProducts();
 
     // Category
     // $('#add').click(function (event) {
@@ -196,6 +300,102 @@ $(document).ready(function () {
 		}
 	});
 
+
+	// Order Btns Functionality
+	$('#addOrder').click(function(){
+		$userid = $('#userid').val();
+		$product_id = $('#product_id').val();
+		$quantity = $('#quantity').val();
+        $('#addOrder').text("...");
+        document.getElementById('addOrder').style.pointerEvents = 'none';
+        document.getElementById('addOrder').style.opacity = '80%';
+		if ($product_id != "" && $userid != "0") {
+			$.ajax({
+				type: 'POST',
+				url: 'functions/products_categories.php',
+				data: {
+					userid:$userid,
+					product_id: $product_id,
+					quantity: $quantity,
+					addOrder: 1
+				},
+				success:function(){
+					orderResult();
+                    $('#addOrder').text("Order Now");
+                    $('#quantity').val(0);
+                    document.getElementById('addOrder').style.pointerEvents = 'visible';
+                    document.getElementById('addOrder').style.opacity = '100%';
+				}
+			});
+		}
+	});
+
+    // cancel order
+    $('#deleteOrder').click(function(){
+		$userid = $('#userid').val();
+		$product_id = $('#product_id').val();
+        $('#deleteOrder').text("...");
+        document.getElementById('deleteOrder').style.pointerEvents = 'none';
+        document.getElementById('deleteOrder').style.opacity = '80%';
+		if ($product_id != "" && $userid != "0") {
+			$.ajax({
+				type: 'POST',
+				url: 'functions/products_categories.php',
+				data: {
+					userid:$userid,
+					product_id: $product_id,
+					deleteOrder: 1
+				},
+				success:function(){
+					orderResult();
+                    $('#deleteOrder').text("Cancel Order");
+                    document.getElementById('deleteOrder').style.pointerEvents = 'visible';
+                    document.getElementById('deleteOrder').style.opacity = '100%';
+				}
+			});
+		}
+	});
+    
+
+	// like product
+	$('#addProductLike').click(function(){
+		$userid = $('#userid').val();
+		$product_id = $('#product_id').val();
+		if ($product_id != "" && $userid != "0") {
+			$.ajax({
+				type: 'POST',
+				url: 'functions/products_categories.php',
+				data: {
+					userid:$userid,
+					product_id: $product_id,
+					addProductLike: 1
+				},
+				success:function(){
+					ProductlikesResult();
+				}
+			});
+		}
+	});
+
+    // unlike product
+    $('#deleteProductLike').click(function(){
+		$userid = $('#userid').val();
+		$product_id = $('#product_id').val();
+		if ($product_id != "" && $userid != "0") {
+			$.ajax({
+				type: 'POST',
+				url: 'functions/products_categories.php',
+				data: {
+					userid:$userid,
+					product_id: $product_id,
+					deleteProductLike: 1
+				},
+				success:function(){
+					ProductlikesResult();
+				}
+			});
+		}
+	});
 
 });
 

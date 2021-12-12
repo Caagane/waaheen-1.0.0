@@ -8,6 +8,8 @@ body {
     color: #444;
 }
 
+
+
 /* Navbar Style */
 .nav-icons {
     width: 100%;
@@ -135,7 +137,6 @@ body {
 
 /* Product in portfolio page  */
 .product {
-    cursor: pointer;
     transition-duration: 0.3s;
 }
 .product:hover {
@@ -185,7 +186,6 @@ body {
 }
 .near-com:hover {
     transform: scale(1.05, 1.05);
-    cursor: pointer;
 }
 .near-com-img {
     width: 100%;

@@ -75,17 +75,19 @@
         </svg>
       </div>  -->
 
-      <div class="container px-md-5 mb-5">
-        <div class="row">
-          <h4 class="col-md-12 text-start fw-bold" style="margin-bottom: -80px"> <i class="fa fa-building"></i> Near Companies</h4>
-        </div>
+      <div class="container px-lg-5 mb-5">
+          <h4 class="col-md-12 col-sm-12 text-start fw-bold"> <i class="fa fa-building"></i> Local Companies</h4>
+          <div class="row">
+            <div class="m-auto near-com-wrapper" id="localCompanies">
+            </div>
+          </div>
       </div>
 
 
 
 
-      <div class="container px-md-5 mb-5">
-          <h4 class="col-md-12 text-start fw-bold"> <i class="fa fa-building"></i> Trending Products in Your Area</h4>
+      <div class="container px-lg-5 mb-5">
+          <h4 class="col-md-12 text-start fw-bold"> <i class="fa fa-gifts"></i> Trending Products in Your Area</h4>
         <div class="row">
             <div id="localProducts" class=" py-3 row g-2 overflow-hidden justify-content-evenly text-center m-auto">
 

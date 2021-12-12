@@ -14,6 +14,7 @@
 
 <script src="js/Users.js"></script>
 <script src="js/productsCategories.js"></script>
+<script src="js/signin_signup.js"></script>
 <script src="js/custom.js"></script>
 
 

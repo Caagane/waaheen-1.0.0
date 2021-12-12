@@ -235,13 +235,113 @@ session_start();
 							<h5 class="mt-2"><?php echo $theLocalProduct['p_name']; ?></h5>
 							<h6><?php echo $theLocalProduct['p_price']; ?></h6>
 
-							<a href="products-details.php?comid=<?php echo $theLocalProduct['com_id']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+							<a href="products-details.php?productid=<?php echo $theLocalProduct['id']; ?>&com_id=<?php echo $theLocalProduct['com_id']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>&category=<?php echo $theLocalProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
 						</div>
 					</div>
 				<?php
 			}
 		}
 	}
-	
+
+	// related Products in Product details page
+	if(isset($_POST['relatedProducts'])){
+		$com_id = $_POST['com_id'];
+		$productCategory = $_POST['productCategory'];
+		$product_id = $_POST['product_id'];
+		$relatedProducts = $Products_Categories_obj->relatedProducts($com_id,$productCategory,$product_id); 
+		if (!$relatedProducts) {
+			?>
+			<i class="fa fa-gifts" style="font-size:100px;"></i>
+			<h3> There is no Products in Your Local Area !!!</h3>
+			<?php
+		} else{
+			foreach ($relatedProducts as $theLocalProduct) {
+				?>
+					<div class="col-md-3 col-sm-12 px-1">
+						<div class="border radius light-bg  text-dark p-4 product">
+							<div class="d-flex text-start">
+								<?php
+									if ($theLocalProduct['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $theLocalProduct['image']; ?>')"></div>
+										<?php
+									}
+								?>
+								<div class="px-2 ">
+									<h6><?php echo $theLocalProduct['f_name'].' '. $theLocalProduct['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+								</div>
+							</div>
+							<div class="product-img" style="background-image: url('./img/products/<?php echo $theLocalProduct['p_img']; ?>')"></div>
+							<h5 class="mt-2"><?php echo $theLocalProduct['p_name']; ?></h5>
+							<h6><?php echo $theLocalProduct['p_price']; ?></h6>
+
+							<a href="products-details.php?productid=<?php echo $theLocalProduct['id']; ?>&com_id=<?php echo $theLocalProduct['com_id']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>&category=<?php echo $theLocalProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+						</div>
+					</div>
+				<?php
+			}
+		}
+	}
+
+	// display order result 
+	if(isset($_POST['orderResult'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$orderResult = $Products_Categories_obj->displayOrderResult($userid,$product_id); 
+		if (!$orderResult) {
+			echo 'false';
+		} else {
+			echo 'true';
+		}
+
+	}
+	// add Order
+	if(isset($_POST['addOrder'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$quantity = $_POST['quantity'];
+		$orderAdding = $Products_Categories_obj->addTheOrder($userid,$product_id,$quantity); 
+	}
+	// delete order
+	if(isset($_POST['deleteOrder'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$orderDeleting = $Products_Categories_obj->deleteTheOrder($userid,$product_id); 
+	}
+
+	// display likes result
+	if(isset($_POST['likesResult'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$likesResult = $Products_Categories_obj->displayLikesResult($userid,$product_id); 
+		if (!$likesResult) {
+			echo 'false';
+		} else {
+			echo 'true';
+		}
+	}
+	// product like counter
+	if(isset($_POST['ProductLikesCounter'])){
+		$product_id = $_POST['product_id'];
+		$alllikesResult = $Products_Categories_obj->ProductLikesCounter($product_id); 
+		echo $alllikesResult;
+	}
+	// add product like
+	if(isset($_POST['addProductLike'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$orderAdding = $Products_Categories_obj->addProductLike($userid,$product_id); 
+	}
+	// delete product like
+	if(isset($_POST['deleteProductLike'])){
+		$userid = $_POST['userid'];
+		$product_id = $_POST['product_id'];
+		$orderDeleting = $Products_Categories_obj->deleteProductLike($userid,$product_id); 
+	}
 
 ?>

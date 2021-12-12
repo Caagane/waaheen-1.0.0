@@ -6,6 +6,7 @@ if (!$_SESSION['waaheen_user_id']) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -201,6 +202,8 @@ if (!$_SESSION['waaheen_user_id']) {
 <body style="background: #fff">
 
 
+
+<input type="text" id="userid" value="<?php  echo $_SESSION['waaheen_user_id']; ?>" style="display:none;">
 
   <!-- Animated Background -->
   <div class="area">

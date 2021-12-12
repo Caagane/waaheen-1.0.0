@@ -1,9 +1,8 @@
 <?php
 session_start();
-	// Include database file
-	include '../classes/Users.php';
+	include '../classes/signin_signup.php';
 	
-	$UserObj = new Users();
+	$Signin_Signup = new Signin_Signup();
 	
 	// SignUp inserting data
 	if(isset($_POST['pass'])) {
@@ -21,7 +20,7 @@ session_start();
 		$city = check_input($_POST['city']);
 		$phone = check_input($_POST['phone']);
 
-		$result = $UserObj->sign_up($first_name,$last_name,$email,$pass,$country,$city,$phone);
+		$result = $Signin_Signup->sign_up($first_name,$last_name,$email,$pass,$country,$city,$phone);
         
         if(!$result){
             echo 'Email Already Taken!';
@@ -43,7 +42,7 @@ session_start();
 		$email = check_input($_POST['email']);
 		$password = md5(check_input($_POST['password']));
 	
-		$auth = $UserObj->check_login($email, $password);
+		$auth = $Signin_Signup->check_login($email, $password);
 	
 		if(!$auth){
 			echo 'Invalid username or password';
