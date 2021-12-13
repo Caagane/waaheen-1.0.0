@@ -107,4 +107,33 @@ class Users extends DbConnection{
         }
     }
 
+    // fetch all carts
+    public function fetchAllCarts($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT products.id, 
+        products.com_id, 
+        products.p_name, 
+        products.p_desc, 
+        products.p_price, 
+        products.p_img, 
+        products.category, 
+        users.f_name, 
+        users.l_name, 
+        users.image, 
+        carts.p_id, 
+        carts.client_id
+        FROM carts, products, users WHERE client_id='$userid' AND carts.p_id=products.id AND products.com_id=users.id ORDER BY `products`.`id` DESC limit 10";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
 }

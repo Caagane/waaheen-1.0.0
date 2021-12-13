@@ -30,6 +30,25 @@ function comProfile(){
     }
 }
 
+
+// user's carts
+function carts(){
+    $userid = $('#userid').val();
+    if ($userid != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/users.php',
+            data: {
+                userid: $userid,
+                fetchcarts: 1
+            },
+            success:function(data){
+                $('#carts').html(data);
+            }
+        });
+    }
+}
+
 $(document).ready(function () {
     
     $('#switch').click(function(){

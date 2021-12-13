@@ -111,59 +111,59 @@ session_start();
 			<?php
 			}
 		}
-
-
-		$com_categories = $usersOj->comCategories($profile_id);
-		?>
-			<div class="row g-2 overflow-hidden justify-content-evenly text-center px-md-5 py-3 mx-md-5 mb-5 m-auto" id="profileCategories">
-				<h3 class="col-md-12 text-start mb-3 mt-5 fw-bold"> <i class="fa fa-tags"></i> Avaliable Categories</h3>
-		<?php
-		if (!$com_categories) {
-			echo '<h6 class="col-md-9 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-gifts w-100" style="font-size: 50px;"></i> No Category For This Company</h6>';
-		} else {
-			foreach ($com_categories as $com_category) {
-			?>
-                    <div class="col-md-3 col-sm-12 px-1">
-                        <div class="border radius light-bg  text-dark p-4 product">
-                            <a href="" class="btn-lg text-dark"> <i class="fa fa-gift"></i> <?php echo $com_category['category'] ?></a>
-                        </div>
-                    </div>
-			<?php
-			}
-			?>
-				</div>
-			<?php
-		}
-
-		$com_all_products = $usersOj->comAllProducts($profile_id);
-		?>
-		<div class="row justify-content-center p-3" id="profileProducts">
-			<h3 class="col-md-9 col-sm-12 text-start mb-3 mt-5 fw-bold"> <i class="fa fa-gift"></i> Product /  Service</h3>
-		<?php
-		if (!$com_all_products) {
-			echo '<h6 class="col-md-9 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-gifts w-100" style="font-size: 50px;"></i> No Products For This Company</h6>';
-		} else {
-			foreach ($com_all_products as $com_product) {
-			?>
-			<div class="col-md-3 col-sm-12 mx-1 light-bg border radius custom-shadow p-3 my-1 m-auto">
-				<div class="px-2 ">
-					<h6><?php echo $com_product['f_name'].' '. $com_product['l_name']; ?></h6>
-					<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
-				</div>
-				<div class="product-img" style="background-image: url('./img/products/<?php echo $com_product['p_img']; ?>')"></div>
-				<h5 class="mt-2"><?php echo $com_product['p_name']; ?></h5>
-				<h6><?php echo $com_product['p_price']; ?></h6>
-
-				<a href="products-details.php?productid=<?php echo $com_product['id']; ?>&com_id=<?php echo $com_product['com_id']; ?>&com-f-name=<?php echo $com_product['f_name']; ?>&com-l-name=<?php echo $com_product['l_name']; ?>&product-name=<?php echo $com_product['p_name']; ?>&product-price=<?php echo $com_product['p_price']; ?>&product-desc=<?php echo $com_product['p_desc']; ?>&product-img=<?php echo $com_product['p_img']; ?>&category=<?php echo $com_product['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
-			</div>
-
-			<?php
-			}
-		}
-		
 	}
-	?>
-		</div>
-	<?php
+
+
+	if(isset($_POST['fetchcarts'])) {
+			
+		$userid = $_POST['userid']; 
+		
+		$allCarts = $usersOj->fetchAllCarts($userid);
+
+		
+		echo '<h4 class="col-md-12 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-shopping-cart" style="font-size: 30px;"></i> <i class="fa fa-gifts" style="font-size: 20px; margin-left: -8px"></i> Your Orders History </h4>';
+
+		if (!$allCarts) {
+			echo '<h6 class="col-md-12 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-gifts w-100" style="font-size: 50px;"></i> No Carts !!!</h6>';
+		} else {
+			foreach ($allCarts as $carts) {
+			?>
+				<div class="row m-auto justify-content-center" id="profileInfo">
+					<div class="col-md-9 col-sm-12 light-bg border radius mt-2 mb-2 p-3">
+							<div class="col-md-12 d-flex text-start">
+								<?php
+									if ($carts['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $carts['image']; ?>')"></div>
+										<?php
+									}
+								?>
+								<div class="px-2 ">
+									<h6><?php echo $carts['f_name'].' '. $carts['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+								</div>
+							</div>
+
+							<div class="col-md-4 col-sm-12 float-md-start">
+								<div class="product-img" style="background-image: url('./img/products/<?php echo $carts['p_img']; ?>')"></div>
+							</div>
+
+							<div class="col-md-8 col-sm-12 px-3 float-md-end">
+								<h5 class="mt-2"><?php echo $carts['p_name']; ?></h5>
+								<h6><?php echo $carts['p_price']; ?></h6>
+
+								<a href="products-details.php?productid=<?php echo $carts['id']; ?>&com_id=<?php echo $carts['com_id']; ?>&com-f-name=<?php echo $carts['f_name']; ?>&com-l-name=<?php echo $carts['l_name']; ?>&product-name=<?php echo $carts['p_name']; ?>&product-price=<?php echo $carts['p_price']; ?>&product-desc=<?php echo $carts['p_desc']; ?>&product-img=<?php echo $carts['p_img']; ?>&category=<?php echo $carts['category']; ?>" class="btn btn-primary custom-color px-4 text-center">Update Order</a>
+							</div>
+					</div>
+				</div>
+
+			<?php
+			}
+		}
+	}
 
 ?>

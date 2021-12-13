@@ -190,6 +190,7 @@ $(document).ready(function () {
     $('#filterProducts').click(function(){
 		$categories = $('#categories').val();
 		$com_id = $('#dashboard_com_id').val();
+		$userid = $('#userid').val();
 		if($categories!=''){
             // alert($categories);
             $.ajax({
@@ -198,6 +199,7 @@ $(document).ready(function () {
                 data: {
                     categories: $categories,
                     com_id: $com_id,
+                    userid: $userid,
                     fetchCategorysProducts: 1
                 },
                 success:function(data){

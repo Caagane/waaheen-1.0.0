@@ -28,7 +28,7 @@
 
  <div class="container my-5">
         <div class="col-md-9 col-sm-12 m-auto text-center d-flex">
-            <a href="#profileInfo" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-building"></i> Information</a>
+            <a href="#comProfile" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-building"></i> Information</a>
             <a href="#profileProducts" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-gift"></i> Products / Services</a>
             <a href="#profileProducts" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-pen"></i> Posts</a>
         </div>
@@ -37,12 +37,38 @@
 
             <input style="display:none" type="text" value="<?php echo $_GET['profile_id']; ?>" name="profile_id" id="profile_id">
 
+            <input style="display:none" type="text" value="<?php echo $_GET['profile_id']; ?>" name="dashboard_com_id" id="dashboard_com_id">
 
+            
 
             <div class="container" id="comProfile">
             </div>
 
 
+
+        <div class="container px-md-5 mb-5" id="profileProducts">
+          <div class="row justify-content-center">
+                <h3 class="col-md-10 col-sm-12 text-start mb-3 mt-5 fw-bold"> <i class="fa fa-gifts"></i> Products /  Services</h3>
+                <div class="col-md-10 col-sm-12 px-md-4 my-3">
+                <p class="col-md-10 col-sm-12 text-start mb-2 fw-bold"> <i class="fa fa-gift"></i> Search Products By Category</p>
+                    <div class="form-group p-4 light-bg border radius d-flex justify-content-around">
+                            <!-- Company ID -->
+                            <input type="text" style="display: none" value="<?php if ($_SESSION['waaheen_user_id'] != 0) { echo $_SESSION['waaheen_user_id']; } ?>" name="dashboard_com_id" id="dashboard_com_id">
+
+                        <select name="categories" id="categories" class="form-select shadow-none py-3 radius">    
+                        </select>
+
+                        <button id="filterProducts" class="btn btn-primary btn-sm p-3 px-4 custom-color ms-2 shadow-none radius"> <i class="fa fa-filter"></i> Filter</button>
+
+                    </div>
+                </div>
+                
+                <div id="categorysProducts" class=" py-3 row g-2 overflow-hidden justify-content-evenly text-center m-auto">
+                    <h1 class="mt-5">No Filter Result</h1>
+                    <p>Filter Your Products By There Categories</p>
+                </div>
+          </div>
+      </div>
 
 
 <?php include('./view/footer.php'); ?>
@@ -54,5 +80,7 @@
     // Full Info on prodile page
     comProfile();
 
+    // load all categories
+    allCategories();
   });
 </script>

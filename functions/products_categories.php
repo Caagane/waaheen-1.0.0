@@ -104,6 +104,7 @@ session_start();
 	if(isset($_POST['fetchCategorysProducts'])){
 		$categories = $_POST['categories'];
 		$com_id = $_POST['com_id'];
+		$userid = $_POST['userid'];
 		$categorysProducts = $Products_Categories_obj->display_categories_products($categories,$com_id); 
 		foreach ($categorysProducts as $categorysProduct) {
 			?>
@@ -114,10 +115,20 @@ session_start();
                         <h5 style="display:none" class="mt-2" id="p_desc<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_desc']; ?></h5>
                         <h5 style="display:none" class="mt-2" id="p_category<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['category']; ?></h5>
                         <h6 id="p_price<?php echo $categorysProduct['id']; ?>"><?php echo $categorysProduct['p_price']; ?></h6>
-					<div class="my-2 d-flex">
-						<button class="btn btn-warning w-100 text-center me-1 edit" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-sync"></i> Edit</button>
-						<button class="btn btn-danger w-100 text-center ms-1 delete" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-trash"></i> Delete</button>
-					</div>
+					<?php
+						if ($userid == $com_id) {
+							?>
+								<div class="my-2 d-flex">
+									<button class="btn btn-warning w-100 text-center me-1 edit" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-sync"></i> Edit</button>
+									<button class="btn btn-danger w-100 text-center ms-1 delete" data-id="<?php echo $categorysProduct['id']; ?>"> <i class="fa fa-trash"></i> Delete</button>
+								</div>
+							<?php
+						} else {
+							?>
+								<a href="products-details.php?productid=<?php echo $categorysProduct['id']; ?>&com_id=<?php echo $categorysProduct['com_id']; ?>&com-f-name=<?php echo $categorysProduct['f_name']; ?>&com-l-name=<?php echo $categorysProduct['l_name']; ?>&product-name=<?php echo $categorysProduct['p_name']; ?>&product-price=<?php echo $categorysProduct['p_price']; ?>&product-desc=<?php echo $categorysProduct['p_desc']; ?>&product-img=<?php echo $categorysProduct['p_img']; ?>&category=<?php echo $categorysProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+							<?php
+						}
+					?>
 				</div>
 			</div>
 			<?php

@@ -280,7 +280,7 @@ if (!$_SESSION['waaheen_user_id']) {
                   <a href="/profile" class="nav-link text-light btn-sm"><i class="fab fa-facebook-messenger nav-icons"></i></a>
                 </li>
                 <li class="nav-item">
-                  <a href="/profile" class="nav-link text-light btn-sm"><i class="fa fa-shopping-cart nav-icons"></i></a>
+                  <a href="carts.php" class="nav-link text-light btn-sm"><i class="fa fa-shopping-cart nav-icons"></i></a>
                 </li>
                 <li class="nav-item">
                   <a href="/profile" class="nav-link text-light btn-sm"><i class="fa fa-user nav-icons"></i></a>

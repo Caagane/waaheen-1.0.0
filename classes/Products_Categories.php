@@ -73,7 +73,18 @@ class Products_Categories extends DbConnection{
     public function display_categories_products($categories,$com_id)
     {
         $categories = $this->con->real_escape_string($categories);
-        $query = "SELECT * FROM products where category = '$categories' and com_id = '$com_id' ORDER BY `products`.`id` desc";
+        $query = "SELECT products.id, 
+        products.com_id, 
+        products.p_name, 
+        products.p_desc, 
+        products.p_price, 
+        products.p_img, 
+        products.category, 
+        users.f_name, 
+        users.l_name, 
+        users.image 
+        FROM products, users WHERE category = '$categories' and com_id = '$com_id' and products.com_id=users.id ORDER BY `products`.`id` desc limit 25";
+        // $query = "SELECT * FROM products, users where category = '$categories' and com_id = '$com_id' and products.com_id=users.id ORDER BY `products`.`id` desc";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
