@@ -293,7 +293,7 @@ if (!$_SESSION['waaheen_user_id']) {
       </div>
       <div class="p-3 bg-white d-flex flex-column profile-drop-down rounded border">
         <a href="#" class="w-100">Profile</a>
-        <a href="#" class="w-100">Settings</a>
+        <a href="settings.php" class="w-100">Settings</a>
         <a href="#" class="w-100">SignOut</a>
       </div>
     </nav>

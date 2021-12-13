@@ -1,0 +1,130 @@
+CREATE TABLE users (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    f_name varchar(225),
+    l_name varchar(225),
+    country varchar(225) NOT NULL,
+    city varchar(225) NOT NULL,
+    phone int(50) NOT NULL,
+    email varchar(225),
+    password varchar(225),
+    image varchar(225),
+    type varchar(225),
+    subscription_ends DATE DEFAULT NULL,
+    login_type varchar(25),
+    last_date date NOT NULL,
+    last_time time NOT NULL,
+    verify int(1) NOT NULL,
+    token varchar(50) NOT NULL,
+	tokenExpire datetime DEFAULT NULL,
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now()
+);
+CREATE TABLE com_info (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    com_id int(50),
+    role varchar(225),
+    role_desc varchar(225),
+    is_delivery varchar(25),
+    delivery_desc varchar(225),
+    address varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
+CREATE TABLE subscription (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    com_id int(50),
+    role varchar(225),
+    role_desc varchar(225),
+    is_delivery varchar(25),
+    delivery_desc varchar(225),
+    address varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
+CREATE TABLE subscription (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    com_id int(50),
+    role varchar(225),
+    role_desc varchar(225),
+    is_delivery varchar(25),
+    delivery_desc varchar(225),
+    address varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
+CREATE TABLE products (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    com_id int(50),
+    p_name varchar(225),
+    p_desc varchar(225),
+    p_price double,
+    p_img varchar(225),
+    category varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
+CREATE TABLE carts (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    p_id int(50),
+    client_id int(50),
+    quantity int(50),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (p_id)  references products (id) on delete cascade,
+    FOREIGN KEY (client_id)  references users (id) on delete cascade
+);
+CREATE TABLE products_likes (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    p_id int(50),
+    user_id int(50),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    UNIQUE `unique_index`(`p_id`, `user_id`),
+    FOREIGN KEY (p_id)  references products (id) on delete cascade,
+    FOREIGN KEY (user_id)  references users (id) on delete cascade
+);
+CREATE TABLE posts (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    user_id int(50),
+    p_id int(50),
+    title varchar(225),
+    body varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (user_id)  references users (id) on delete cascade,
+    FOREIGN KEY (p_id)  references products (id) on delete cascade
+);
+CREATE TABLE posts_comments (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    post_id int(50),
+    user_id int(50),
+    comment varchar(225),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (post_id)  references posts (id) on delete cascade,
+    FOREIGN KEY (user_id)  references users (id) on delete cascade
+);
+CREATE TABLE posts_likes (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    post_id int(50),
+    user_id int(50),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    UNIQUE `unique_index`(`post_id`, `user_id`),
+    FOREIGN KEY (post_id)  references posts (id) on delete cascade,
+    FOREIGN KEY (user_id)  references users (id) on delete cascade
+);
+CREATE TABLE messages (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    sender int(50),
+    reciever int(50),
+    message text,
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (sender)  references users (id) on delete cascade,
+    FOREIGN KEY (reciever)  references users (id) on delete cascade
+);

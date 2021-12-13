@@ -99,4 +99,18 @@
 
 <h1><?php echo $_SESSION['waaheen_user_id'] ?></h1>
     
+
+
+
 <?php include('./view/footer.php'); ?>
+
+
+<script>
+  $(document).ready(function () {
+
+    // Call Local Products fun
+    localProducts();
+    localCompanies();
+
+  });
+</script>

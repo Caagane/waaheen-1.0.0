@@ -69,5 +69,21 @@
 
 
 
-
 <?php include('./view/footer.php'); ?>
+
+<script>
+  $(document).ready(function () {
+
+      //if Product ordered or not
+      orderResult();
+      // products likes
+      ProductlikesResult();
+      // product likes COUNTER
+      ProductLikesCounter();
+      // Related Products in Product Details page 
+      relatedProducts();
+  });
+</script>
+
+
+

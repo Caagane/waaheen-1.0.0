@@ -25,3 +25,13 @@ $('#closeEditProducts').click(function(){
 $('#closeDeleteProducts').click(function(){
     $('#deleteModel').modal('hide');
 });
+
+// open switch in settings page
+$('#openSwitch').click(function(){
+    $('#switchModel').modal('show');
+});
+// close switch model
+$('#closeSwitch').click(function(){
+    $('#switchModel').modal('hide');
+});
+

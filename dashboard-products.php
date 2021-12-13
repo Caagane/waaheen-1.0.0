@@ -215,3 +215,15 @@
 
 
 <?php include('./view/footer.php'); ?>
+
+
+<script>
+$(document).ready(function () {
+    
+    // Company Dashboard
+    allCategories();
+    lastProducts();
+    // 
+  
+});
+</script>

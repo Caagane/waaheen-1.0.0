@@ -149,21 +149,7 @@ function localProducts(){
 
 
 $(document).ready(function () {
-    
-    // Company Dashboard
-    allCategories();
-    lastProducts();
-    // 
-    //if Product ordered or not
-    orderResult();
-    // products likes
-    ProductlikesResult();
-    // product likes COUNTER
-    ProductLikesCounter()
-	// Call Local Products fun
-	localProducts();
-    // Related Products in Product Details page 
-    relatedProducts();
+
 
     // Category
     // $('#add').click(function (event) {

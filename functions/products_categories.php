@@ -252,7 +252,7 @@ session_start();
 		if (!$relatedProducts) {
 			?>
 			<i class="fa fa-gifts" style="font-size:100px;"></i>
-			<h3> There is no Products in Your Local Area !!!</h3>
+			<h3> There is no Related Product !!!</h3>
 			<?php
 		} else{
 			foreach ($relatedProducts as $theLocalProduct) {

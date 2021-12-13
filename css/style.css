@@ -9,7 +9,6 @@ body {
 }
 
 
-
 /* Navbar Style */
 .nav-icons {
     width: 100%;
@@ -84,18 +83,18 @@ body {
     color: #F2F2F2;
     border-left: 10px solid #F2F2F2;
     border-radius: 10px;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
     text-align: left;
 }
 .name h2 {
     color: #dcd0fd;
-    font-size: 48px;
+    font-size: 28px;
     margin-bottom: -2px;
 }
 .name p {
     color: #ebe4ff;
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: -1px;
 }
 
@@ -107,8 +106,8 @@ body {
 }
 /* user profile image style */
 .user-profile-img {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     background: #F2F2F2;
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
