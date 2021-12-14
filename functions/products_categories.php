@@ -355,4 +355,152 @@ session_start();
 		$orderDeleting = $Products_Categories_obj->deleteProductLike($userid,$product_id); 
 	}
 
+	// products info in dashboard
+	if(isset($_POST['Analizing'])){
+		$userid = $_POST['userid'];
+		$categoriesInfo = $Products_Categories_obj->categoryCounter($userid); 
+
+		$productsInfo = $Products_Categories_obj->productCounter($userid); 
+
+		$postsInfo = $Products_Categories_obj->postsCounter($userid); 
+
+		?>
+		
+        <div class="row g-3 border radius light-bg p-3 mb-2" id="productsInfo">
+			<h5 class='text-center fw-bold'>You have Uploaded</h5>
+
+			<div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+				<div class="col-md-4 col-sm-6">
+					<i class="fa fa-gifts" style="font-size: 4rem; color: #0000ff"></i>
+					<h3>Categories = <?php echo $categoriesInfo; ?></h3>
+				</div>
+
+				<div class="col-md-4 col-sm-6">
+					<i class="fa fa-gift" style="font-size: 4rem; color: #0000ff"></i>
+					<h3>Products = <?php echo $productsInfo; ?></h3>
+				</div>
+
+				<div class="col-md-4 col-sm-6">
+					<i class="fa fa-pen" style="font-size: 4rem; color: #0000ff"></i>
+					<h3>Posts = <?php echo $postsInfo; ?></h3>
+				</div>
+			</div>
+		</div>
+		<?php
+
+			$totalOrder = $Products_Categories_obj->totalOrder($userid); 
+
+			$completed = $Products_Categories_obj->completed($userid); 
+
+			$notCompleted = $Products_Categories_obj->notCompleted($userid); 
+
+		?>
+        <div class="row g-3 border radius light-bg p-3 mt-3">
+        <h5 class='text-center fw-bold'>Ordered Products</h5>
+
+            <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+                <div class="form-group p-2 w-100">
+                    <label class='fw-bold text-start pb-3'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                </div>
+                <div class="form-group p-2 w-100">
+                    <label class='fw-bold text-start pb-3'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <i class="fa fa-gift" style="font-size: 4rem; color: #0000ff"></i>
+                <h3>Total = <?php echo $totalOrder; ?></h3>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> + </i> Completed = <?php echo $completed; ?></h6>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                </div>
+				<script>
+					let completed = <?php echo $completed; ?>; 
+					let totalOrder = <?php echo $totalOrder; ?>; 
+					let orderPercent = completed*100/totalOrder; 
+					const completePercent =  orderPercent + "%";
+					document.getElementById('completePercent').innerText = completePercent;
+				</script>
+                <h6 class='p-2' id="completePercent">50%</h6>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> - </i> Not Completed = <?php echo $notCompleted; ?></h6>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                </div>
+				<script>
+					let notCompleted = <?php echo $notCompleted; ?>; 
+					let totalOrder1 = <?php echo $totalOrder; ?>; 
+					let orderPercent1 = notCompleted*100/totalOrder1; 
+					const notCompletePercent =  orderPercent1 + "%";
+					document.getElementById('notCompletePercent').innerText = notCompletePercent;
+				</script>
+                <h6 class='p-2' id="notCompletePercent">50%</h6>
+            </div>
+        </div>
+		<?php
+
+		$totalVisitors = $Products_Categories_obj->totalVisitors($userid); 
+
+		$maleVisitors = $Products_Categories_obj->maleVisitors($userid); 
+
+		$femaleVisitors = $Products_Categories_obj->femaleVisitors($userid); 
+
+		?>
+		
+        <div class="row g-3 border radius light-bg p-3 mt-3">
+        	<h5 class='text-center fw-bold'>Profile: Visitors</h5>
+
+            <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+                <div class="form-group p-2 w-100">
+                    <label class='fw-bold text-start pb-3'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                </div>
+                <div class="form-group p-2 w-100">
+                    <label class='fw-bold text-start pb-3'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <i class="fa fa-users" style="font-size: 4rem; color: #0000ff"></i>
+                <h3>Total = <?php echo $totalVisitors; ?> </h3>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4 class='fw-bold'><i class="fa fa-male" style="font-size: 4rem; color: #0000ff"> </i> Male = <?php echo $maleVisitors; ?> </h4>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                </div>
+				<script>
+					let male = <?php echo $maleVisitors; ?>; 
+					let total = <?php echo $totalVisitors; ?>; 
+					let percent = male*100/total; 
+					const maleTotalVisitor =  percent + "%";
+					document.getElementById('malePercentage').innerText = maleTotalVisitor;
+				</script>
+                <h6 class='p-2' id="malePercentage">50%</h6>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4 class='fw-bold'><i class="fa fa-female" style="font-size: 4rem; color: #0000ff"> </i> Female = <?php echo $femaleVisitors; ?> </h4>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                </div>
+				<script>
+					let female = <?php echo $femaleVisitors; ?>; 
+					let total1 = <?php echo $totalVisitors; ?>; 
+					let percent1 = female*100/total1; 
+					const femaleTotalVisitor =  percent1 + "%";
+					document.getElementById('femalePercentage').innerText = femaleTotalVisitor;
+				</script>
+                <h6 class='p-2' id="femalePercentage">50%</h6>
+            </div>
+        </div>
+		<?php
+		
+	}
+
 ?>

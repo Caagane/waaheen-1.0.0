@@ -147,6 +147,25 @@ function localProducts(){
     });
 }
 
+// Products info in dashboard
+function Analizing(){
+    $userid = $('#userid').val();
+    if ($userid != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                userid: $userid,
+                Analizing: 1
+            },
+            success:function(data){
+                $('#Analizing').html(data);
+            }
+        });
+    }
+}
+
+
 
 $(document).ready(function () {
 

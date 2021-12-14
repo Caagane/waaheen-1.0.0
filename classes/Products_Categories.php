@@ -208,7 +208,7 @@ class Products_Categories extends DbConnection{
         $userid = $this->con->real_escape_string($userid);
         $product_id = $this->con->real_escape_string($product_id);
         $quantity = $this->con->real_escape_string($quantity);
-        $query = "INSERT INTO `carts` (p_id, client_id, quantity) VALUES ('$product_id','$userid','$quantity')";
+        $query = "INSERT INTO `carts` (p_id, client_id, quantity,is_complete) VALUES ('$product_id','$userid','$quantity','no')";
         $sql = $this->con->query($query);
     }
     // delete order
@@ -261,6 +261,101 @@ class Products_Categories extends DbConnection{
 
     }
 
+    // categories counter in dashboard
+    public function categoryCounter($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT DISTINCT (category) FROM products  where com_id = '$userid' ORDER BY `products`.`category` ASC";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // Products Counter in dashboard
+    public function productCounter($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM products  where com_id = '$userid' ORDER BY `products`.`category` ASC";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // Posts Counter in dashboard
+    public function postsCounter($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM posts  where `user_id` = '$userid' ORDER BY `posts`.`user_id` ASC";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
 
+    // total visitors 
+    public function totalVisitors($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM visitors  where `com_id` = '$userid' ORDER BY `visitors`.`id` ASC";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // male Visitors
+    public function maleVisitors($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT visitors.com_id, 
+        visitors.p_id, 
+        visitors.client_id,
+        users.id, 
+        users.gender
+        FROM visitors, users  where visitors.`com_id`='$userid' AND visitors.client_id=users.id AND gender='male'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // female visitors
+    public function femaleVisitors($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT visitors.com_id, 
+        visitors.p_id, 
+        visitors.client_id,
+        users.id, 
+        users.gender
+        FROM visitors, users  where `com_id` = '$userid' AND visitors.client_id=users.id AND gender = 'female'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+
+    // total order conteter
+    public function totalOrder($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id
+        FROM carts, products  where `com_id` = '$userid' AND products.id=carts.p_id";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // completed orders
+    public function completed($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id
+        FROM carts, products  where `com_id` = '$userid' AND products.id=carts.p_id AND is_complete='yes'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // not completed orders
+    public function notCompleted($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id
+        FROM carts, products  where `com_id` = '$userid' AND products.id=carts.p_id AND is_complete='no'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
 
 }
