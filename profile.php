@@ -9,8 +9,11 @@
                 <h3>Abdirahman</h3>
                 <h3>Agane</h3>
                 <div class="d-flex py-2">
-                    <button class="btn btn-light radius px-2 mx-1"> <i class="fa fa-plus"></i> Follow </button>
-                    <button class="btn btn-light radius px-2 mx-1"> <i class="fa fa-comment"></i> Message </button>
+                    <div id="clientWrapper">
+                        <button class="btn btn-light px-4 mx-1" id="client" style="display:none;"> <i class="fa fa-plus"></i> Client </button>
+                        <button class="btn btn-danger px-4 mx-1" id="unClient" style="display:none; background:red"> <i class="fa fa-times"></i> Un Client </button>
+                    </div>
+                    <button class="btn btn-light px-2 mx-1"> <i class="fa fa-comment"></i> Message </button>
                 </div>
             </div>
         </div>
@@ -28,9 +31,9 @@
 
  <div class="container my-5">
         <div class="col-md-9 col-sm-12 m-auto text-center d-flex">
-            <a href="#comProfile" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-building"></i> Information</a>
-            <a href="#profileProducts" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-gift"></i> Products / Services</a>
-            <a href="#profileProducts" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-pen"></i> Posts</a>
+            <a href="#comProfile" class="radius custom-shadow me-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-building"></i> Information</a>
+            <a href="#profileProducts" class="radius custom-shadow ms-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-gift"></i> Products / Services</a>
+            <!-- <a href="#profileProducts" class="radius custom-shadow mx-1 px-2 py-3 w-100 border light-bg"> <i class="fa fa-pen"></i> Posts</a> -->
         </div>
     </div>
 
@@ -82,5 +85,8 @@
 
     // load all categories
     allCategories();
+
+    // client state
+    clientResult();
   });
 </script>

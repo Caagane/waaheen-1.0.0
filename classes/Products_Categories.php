@@ -353,9 +353,130 @@ class Products_Categories extends DbConnection{
         carts.is_complete, 
         products.id,
         products.com_id
-        FROM carts, products  where `com_id` = '$userid' AND products.id=carts.p_id AND is_complete='no'";
+        FROM carts, products  where `com_id` = '$userid' AND products.id=carts.p_id AND is_complete!='yes'";
         $result = $this->con->query($query);
         return $result->num_rows;
     }
+    // filter Orders 
+    public function filterTotalOrder($userid,$orderFrom,$orderTo)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $orderFrom = $this->con->real_escape_string($orderFrom);
+        $orderTo = $this->con->real_escape_string($orderTo);
+
+        $date1 = date('Y-m-d', strtotime($orderFrom));
+        $date2 = date('Y-m-d', strtotime($orderTo));
+
+
+
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id,
+        carts.create_at
+        FROM carts, products  where `com_id`='$userid' AND (carts.create_at BETWEEN '$date1' AND '$date2') AND products.id=carts.p_id";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+
+        // if ($result->num_rows > 0) {
+        //     return $orderFrom;
+        // } else {
+        //     return $orderFrom;
+        // }
+    }
+    // completed orders
+    public function filterCompleted($userid,$orderFrom,$orderTo)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $orderFrom = $this->con->real_escape_string($orderFrom);
+        $orderTo = $this->con->real_escape_string($orderTo);
+
+        $date1 = date('Y-m-d', strtotime($orderFrom));
+        $date2 = date('Y-m-d', strtotime($orderTo));
+        
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id,
+        carts.create_at
+        FROM carts, products  where `com_id` = '$userid' AND (carts.create_at BETWEEN '$date1' AND '$date2') AND products.id=carts.p_id AND is_complete='yes'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+    // not completed orders
+    public function filterNotCompleted($userid,$orderFrom,$orderTo)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $orderFrom = $this->con->real_escape_string($orderFrom);
+        $orderTo = $this->con->real_escape_string($orderTo);
+        
+        $date1 = date('Y-m-d', strtotime($orderFrom));
+        $date2 = date('Y-m-d', strtotime($orderTo));
+        
+        $query = "SELECT carts.p_id, 
+        carts.is_complete, 
+        products.id,
+        products.com_id,
+        carts.create_at
+        FROM carts, products  where `com_id` = '$userid' AND (carts.create_at BETWEEN '$date1' AND '$date2') AND products.id=carts.p_id AND is_complete!='yes'";
+        $result = $this->con->query($query);
+        return $result->num_rows;
+    }
+
+        // Filter total visitors 
+        public function filterTotalVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo)
+        {
+            $userid = $this->con->real_escape_string($userid);
+            
+            $filterVisitorsFrom = $this->con->real_escape_string($filterVisitorsFrom);
+            $filterVisitorsTo = $this->con->real_escape_string($filterVisitorsTo);
+
+            $date1 = date('Y-m-d', strtotime($filterVisitorsFrom));
+            $date2 = date('Y-m-d', strtotime($filterVisitorsTo));
+
+            $query = "SELECT * FROM visitors  where `com_id` = '$userid' AND (visitors.create_at BETWEEN '$date1' AND '$date2') ORDER BY `visitors`.`id` ASC";
+            $result = $this->con->query($query);
+            return $result->num_rows;
+        }
+        // Filter male Visitors
+        public function filterMaleVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo)
+        {
+            $userid = $this->con->real_escape_string($userid);
+
+            $filterVisitorsFrom = $this->con->real_escape_string($filterVisitorsFrom);
+            $filterVisitorsTo = $this->con->real_escape_string($filterVisitorsTo);
+
+            $date1 = date('Y-m-d', strtotime($filterVisitorsFrom));
+            $date2 = date('Y-m-d', strtotime($filterVisitorsTo));
+
+            $query = "SELECT visitors.com_id, 
+            visitors.p_id, 
+            visitors.client_id,
+            users.id, 
+            users.gender
+            FROM visitors, users  where visitors.`com_id`='$userid' AND (visitors.create_at BETWEEN '$date1' AND '$date2') AND visitors.client_id=users.id AND gender='male'";
+            $result = $this->con->query($query);
+            return $result->num_rows;
+        }
+        // Filter female visitors
+        public function filterFemaleVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo)
+        {
+            $userid = $this->con->real_escape_string($userid);
+            
+            $filterVisitorsFrom = $this->con->real_escape_string($filterVisitorsFrom);
+            $filterVisitorsTo = $this->con->real_escape_string($filterVisitorsTo);
+
+            $date1 = date('Y-m-d', strtotime($filterVisitorsFrom));
+            $date2 = date('Y-m-d', strtotime($filterVisitorsTo));
+            
+            $query = "SELECT visitors.com_id, 
+            visitors.p_id, 
+            visitors.client_id,
+            users.id, 
+            users.gender
+            FROM visitors, users  where `com_id` = '$userid' AND (visitors.create_at BETWEEN '$date1' AND '$date2') AND visitors.client_id=users.id AND gender = 'female'";
+            $result = $this->con->query($query);
+            return $result->num_rows;
+        }
 
 }

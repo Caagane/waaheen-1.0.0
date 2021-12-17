@@ -1,5 +1,4 @@
 <?php
-session_start();
 	// Include database file
 	include '../classes/Products_Categories.php';
 	
@@ -356,56 +355,93 @@ session_start();
 	}
 
 	// products info in dashboard
-	if(isset($_POST['Analizing'])){
+	if(isset($_POST['analyzingProducts'])){
 		$userid = $_POST['userid'];
+
 		$categoriesInfo = $Products_Categories_obj->categoryCounter($userid); 
-
 		$productsInfo = $Products_Categories_obj->productCounter($userid); 
-
 		$postsInfo = $Products_Categories_obj->postsCounter($userid); 
 
 		?>
 		
-        <div class="row g-3 border radius light-bg p-3 mb-2" id="productsInfo">
 			<h5 class='text-center fw-bold'>You have Uploaded</h5>
 
 			<div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
-				<div class="col-md-4 col-sm-6">
+				<div class="col-md-6 col-sm-6">
 					<i class="fa fa-gifts" style="font-size: 4rem; color: #0000ff"></i>
 					<h3>Categories = <?php echo $categoriesInfo; ?></h3>
 				</div>
 
-				<div class="col-md-4 col-sm-6">
+				<div class="col-md-6 col-sm-6">
 					<i class="fa fa-gift" style="font-size: 4rem; color: #0000ff"></i>
 					<h3>Products = <?php echo $productsInfo; ?></h3>
 				</div>
 
-				<div class="col-md-4 col-sm-6">
+				<!-- <div class="col-md-4 col-sm-6">
 					<i class="fa fa-pen" style="font-size: 4rem; color: #0000ff"></i>
-					<h3>Posts = <?php echo $postsInfo; ?></h3>
-				</div>
+					<h3>Posts = </h3>
+				</div> -->
+
 			</div>
-		</div>
 		<?php
+	}
 
-			$totalOrder = $Products_Categories_obj->totalOrder($userid); 
 
-			$completed = $Products_Categories_obj->completed($userid); 
 
-			$notCompleted = $Products_Categories_obj->notCompleted($userid); 
+	
+	if(isset($_POST['analyzingOrders'])){
+		$userid = $_POST['userid'];
+
+		$totalOrder = $Products_Categories_obj->totalOrder($userid); 
+		$completed = $Products_Categories_obj->completed($userid); 
+		$notCompleted = $Products_Categories_obj->notCompleted($userid); 
 
 		?>
-        <div class="row g-3 border radius light-bg p-3 mt-3">
+		<script>
+			$(document).ready(function () {
+				// filter orders in dashboard
+				$('.filterOrders').click(function(){
+					$userid = $('#userid').val();
+					$orderFrom = $('#orderFrom').val();
+					$orderTo = $('#orderTo').val();
+					if ($userid != "0") {
+						if ($orderFrom > $orderTo) {
+							alert('Please Choose From Date To Date!!!');
+						} else if ($orderFrom != "" && $orderTo != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'functions/products_categories.php',
+								data: {
+									userid:$userid,
+									orderFrom:$orderFrom,
+									orderTo:$orderTo,
+									filterOrders: 1
+								},
+								success:function(response){
+									alert($userid);
+									$('#analyzingOrders').html(response);
+								}
+							});
+						} else {
+							alert('Please Choose From Date To Date');
+						}
+					}
+				});
+			});
+		</script>
         <h5 class='text-center fw-bold'>Ordered Products</h5>
 
-            <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
-                <div class="form-group p-2 w-100">
-                    <label class='fw-bold text-start pb-3'>From</label>
-                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+			<div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="orderFrom" id="orderFrom" />
                 </div>
-                <div class="form-group p-2 w-100">
-                    <label class='fw-bold text-start pb-3'>To</label>
-                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="orderTo" id="orderTo" />
+                </div>
+                <div class="form-group p-2">
+					<button class="btn btn-primary custom-color px-3 filterOrders" id="filterOrders" name="filterOrders">Filter</button>
                 </div>
             </div>
 
@@ -416,7 +452,7 @@ session_start();
             <div class="col-md-4 col-sm-6">
                 <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> + </i> Completed = <?php echo $completed; ?></h6>
                 <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
-                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                    <div class="bg-light p-2 radius" id="completeProgresss"></div>
                 </div>
 				<script>
 					let completed = <?php echo $completed; ?>; 
@@ -424,13 +460,14 @@ session_start();
 					let orderPercent = completed*100/totalOrder; 
 					const completePercent =  orderPercent + "%";
 					document.getElementById('completePercent').innerText = completePercent;
+					document.getElementById('completeProgresss').style.width = completePercent;
 				</script>
                 <h6 class='p-2' id="completePercent">50%</h6>
             </div>
             <div class="col-md-4 col-sm-6">
                 <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> - </i> Not Completed = <?php echo $notCompleted; ?></h6>
                 <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
-                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                    <div class="bg-light p-2 radius" id="notcompleteProgresss"></div>
                 </div>
 				<script>
 					let notCompleted = <?php echo $notCompleted; ?>; 
@@ -438,31 +475,68 @@ session_start();
 					let orderPercent1 = notCompleted*100/totalOrder1; 
 					const notCompletePercent =  orderPercent1 + "%";
 					document.getElementById('notCompletePercent').innerText = notCompletePercent;
+					document.getElementById('notcompleteProgresss').style.width = notCompletePercent;
 				</script>
                 <h6 class='p-2' id="notCompletePercent">50%</h6>
             </div>
-        </div>
 		<?php
+	}
+
+
+
+	if(isset($_POST['analyzingVisitors'])){
+		$userid = $_POST['userid'];
 
 		$totalVisitors = $Products_Categories_obj->totalVisitors($userid); 
-
 		$maleVisitors = $Products_Categories_obj->maleVisitors($userid); 
-
 		$femaleVisitors = $Products_Categories_obj->femaleVisitors($userid); 
 
 		?>
+		<script>
+			$(document).ready(function () {
+				// filter Visitors in dashboard
+				$('.filterVisitors').click(function(){
+					$userid = $('#userid').val();
+					$visitorsFrom = $('#visitorsFrom').val();
+					$visitorsTo = $('#visitorsTo').val();
+					if ($userid != "0") {
+						if ($visitorsFrom > $visitorsTo) {
+							alert('Please Choose From Date To Date!!!');
+						} else if ($visitorsFrom != "" && $visitorsTo != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'functions/products_categories.php',
+								data: {
+									userid:$userid,
+									visitorsFrom:$visitorsFrom,
+									visitorsTo:$visitorsTo,
+									filterVisitors: 1
+								},
+								success:function(response){
+									$('#analyzingVisitors').html(response);
+								}
+							});
+						} else {
+							alert('Please Choose From Date To Date');
+						}
+					}
+				});
+			});
+		</script>
 		
-        <div class="row g-3 border radius light-bg p-3 mt-3">
         	<h5 class='text-center fw-bold'>Profile: Visitors</h5>
 
             <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
-                <div class="form-group p-2 w-100">
-                    <label class='fw-bold text-start pb-3'>From</label>
-                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="visitorsFrom" id="visitorsFrom" />
                 </div>
-                <div class="form-group p-2 w-100">
-                    <label class='fw-bold text-start pb-3'>To</label>
-                    <input class='form-control shadow-none p-2' type="date" name="" id="" />
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="visitorsTo" id="visitorsTo" />
+                </div>
+                <div class="form-group p-2">
+					<button class="btn btn-primary custom-color px-3 filterVisitors" id="filterVisitors" name="filterVisitors">Filter</button>
                 </div>
             </div>
 
@@ -473,7 +547,7 @@ session_start();
             <div class="col-md-4 col-sm-6">
                 <h4 class='fw-bold'><i class="fa fa-male" style="font-size: 4rem; color: #0000ff"> </i> Male = <?php echo $maleVisitors; ?> </h4>
                 <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
-                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                    <div class="bg-light p-2 radius text-dark" id="maleProgress"></div>
                 </div>
 				<script>
 					let male = <?php echo $maleVisitors; ?>; 
@@ -481,13 +555,14 @@ session_start();
 					let percent = male*100/total; 
 					const maleTotalVisitor =  percent + "%";
 					document.getElementById('malePercentage').innerText = maleTotalVisitor;
+					document.getElementById('maleProgress').style.width = maleTotalVisitor;
 				</script>
                 <h6 class='p-2' id="malePercentage">50%</h6>
             </div>
             <div class="col-md-4 col-sm-6">
                 <h4 class='fw-bold'><i class="fa fa-female" style="font-size: 4rem; color: #0000ff"> </i> Female = <?php echo $femaleVisitors; ?> </h4>
                 <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
-                    <div class="bg-light p-2 radius" style="width: 50%"></div>
+                    <div class="bg-light p-2 radius" id="femaleProgress"></div>
                 </div>
 				<script>
 					let female = <?php echo $femaleVisitors; ?>; 
@@ -495,12 +570,228 @@ session_start();
 					let percent1 = female*100/total1; 
 					const femaleTotalVisitor =  percent1 + "%";
 					document.getElementById('femalePercentage').innerText = femaleTotalVisitor;
+					document.getElementById('femaleProgress').style.width = femaleTotalVisitor;
 				</script>
                 <h6 class='p-2' id="femalePercentage">50%</h6>
             </div>
-        </div>
 		<?php
 		
 	}
+
+
+
+	// filltering orders info in dashboard
+	if(isset($_POST['filterOrders'])){
+		$userid = $_POST['userid'];
+		$orderFrom = $_POST['orderFrom'];
+		$orderTo = $_POST['orderTo'];
+
+		$filtertotalOrder = $Products_Categories_obj->filterTotalOrder($userid,$orderFrom,$orderTo); 
+		$filtercompleted = $Products_Categories_obj->filterCompleted($userid,$orderFrom,$orderTo); 
+		$filternotCompleted = $Products_Categories_obj->filterNotCompleted($userid,$orderFrom,$orderTo); 
+
+		?>
+		<script>
+			$(document).ready(function () {
+				// filter orders in dashboard
+				$('.filterOrders').click(function(){
+					$userid = $('#userid').val();
+					$orderFrom = $('#orderFrom').val();
+					$orderTo = $('#orderTo').val();
+					if ($userid != "0") {
+						if ($orderFrom > $orderTo) {
+							alert('Please Choose From Date To Date!!!');
+						} else if ($orderFrom != "" && $orderTo != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'functions/products_categories.php',
+								data: {
+									userid:$userid,
+									orderFrom:$orderFrom,
+									orderTo:$orderTo,
+									filterOrders: 1
+								},
+								success:function(response){
+									$('#analyzingOrders').html(response);
+								}
+							});
+						} else {
+							alert('Please Choose From Date To Date');
+						}
+					}
+				});
+			});
+		</script>
+        <h5 class='text-center fw-bold'>Ordered Products</h5>
+
+			<div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="orderFrom" id="orderFrom" />
+                </div>
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="orderTo" id="orderTo" />
+                </div>
+                <div class="form-group p-2">
+					<button class="btn btn-primary custom-color px-3 filterOrders" id="filterGender" name="filterOrders">Filter</button>
+                </div>
+            </div>
+				<?php   
+					if ($filtertotalOrder == 0) {
+						$filterCompleted = $filtercompleted; 
+						$filterTotalOrder = $filtertotalOrder; 
+						$filterCorderPercent = $filterCompleted*100/1; 
+						$filterCompletePercent =  $filterCorderPercent;
+					} else {
+						$filterCompleted = $filtercompleted; 
+						$filterTotalOrder = $filtertotalOrder; 
+						$filterCorderPercent = $filterCompleted*100/$filterTotalOrder; 
+						$filterCompletePercent =  $filterCorderPercent;
+					}
+
+
+					if ($filtertotalOrder == 0) {
+						$filternotCompleted = $filtercompleted;    
+						$filtertotalOrder1 = $filtertotalOrder;
+						$filterorderPercent1 = $filternotCompleted*100/1; 
+						$filternotCompletePercent =  $filterorderPercent1;
+					} else {
+						$filternotCompleted = $filtercompleted;    
+						$filtertotalOrder1 = $filtertotalOrder;
+						$filterorderPercent1 = $filternotCompleted*100/$filtertotalOrder1; 
+						$filternotCompletePercent =  $filterorderPercent1;
+					}
+					
+				?>
+            <div class="col-md-4 col-sm-6">
+                <i class="fa fa-gift" style="font-size: 4rem; color: #0000ff"></i>
+                <h3>Total = <?php echo $filtertotalOrder; ?></h3>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> + </i> Completed = <?php echo $filtercompleted; ?></h6>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" id="filterCompleteProgresss" style="width: <?php echo $filterCompletePercent; ?>%"></div>
+                </div>
+                <h6 class='p-2' id="filterCompletePercent"><?php echo $filterCompletePercent; ?>%</h6>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h6 class='fw-bold'><i class="fa fa-shopping-cart px-2" style="font-size: 2.5rem; color: #0000ff"> - </i> Not Completed = <?php echo $filternotCompleted; ?></h6>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" id="filternotcompleteProgresss" style="width: <?php echo $filterCompletePercent; ?>%"></div>
+                </div>
+                <h6 class='p-2' id="filternotCompletePercent"><?php echo $filterCompletePercent; ?>%</h6>
+            </div>
+		<?php
+	}
+
+
+	// Filter Visitors
+	if(isset($_POST['filterVisitors'])){
+
+		$userid = $_POST['userid'];
+		$filterVisitorsFrom = $_POST['visitorsFrom'];
+		$filterVisitorsTo = $_POST['visitorsTo'];
+
+		$filtertotalVisitors = $Products_Categories_obj->filterTotalVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo); 
+		$filtermaleVisitors = $Products_Categories_obj->filterMaleVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo); 
+		$filterfemaleVisitors = $Products_Categories_obj->filterFemaleVisitors($userid,$filterVisitorsFrom,$filterVisitorsTo); 
+
+		?>
+		<script>
+			$(document).ready(function () {
+				// filter Visitors in dashboard
+				$('.filterVisitors').click(function(){
+					$userid = $('#userid').val();
+					$visitorsFrom = $('#visitorsFrom').val();
+					$visitorsTo = $('#visitorsTo').val();
+					if ($userid != "0") {
+						if ($visitorsFrom > $visitorsTo) {
+							alert('Please Choose From Date To Date!!!');
+						} else if ($visitorsFrom != "" && $visitorsTo != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'functions/products_categories.php',
+								data: {
+									userid:$userid,
+									visitorsFrom:$visitorsFrom,
+									visitorsTo:$visitorsTo,
+									filterVisitors: 1
+								},
+								success:function(response){
+									$('#analyzingVisitors').html(response);
+								}
+							});
+						} else {
+							alert('Please Choose From Date To Date');
+						}
+					}
+				});
+			});
+		</script>
+
+        	<h5 class='text-center fw-bold'>Profile: Visitors</h5>
+
+            <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>From</label>
+                    <input class='form-control shadow-none p-2' type="date" name="visitorsFrom" id="visitorsFrom" />
+                </div>
+                <div class="form-group p-2 w-100 d-md-flex">
+                    <label class='fw-bold text-start p-2'>To</label>
+                    <input class='form-control shadow-none p-2' type="date" name="visitorsTo" id="visitorsTo" />
+                </div>
+                <div class="form-group p-2">
+					<button class="btn btn-primary custom-color px-3 filterVisitors" id="filterVisitors" name="filterVisitors">Filter</button>
+                </div>
+            </div>
+
+
+			<?php   
+					if ($filtertotalVisitors == 0) {
+						$male = $filtermaleVisitors; 
+						$total = $filtertotalVisitors; 
+						$percent = $male*100/1; 
+					} else {
+						$male = $filtermaleVisitors; 
+						$total = $filtertotalVisitors; 
+						$percent = $male*100/$total; 
+					}
+
+
+					if ($filtertotalVisitors == 0) {
+						$female = $filterfemaleVisitors; 
+						$total1 = $filtertotalVisitors; 
+						$percent1 = $female*100/1; 
+					} else {
+						$female = $filterfemaleVisitors; 
+						$total1 = $filtertotalVisitors; 
+						$percent1 = $female*100/$total1; 
+					}
+					
+				?>
+
+            <div class="col-md-4 col-sm-6">
+                <i class="fa fa-users" style="font-size: 4rem; color: #0000ff"></i>
+                <h3>Total = <?php echo $filtertotalVisitors; ?> </h3>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4 class='fw-bold'><i class="fa fa-male" style="font-size: 4rem; color: #0000ff"> </i> Male = <?php echo $filtermaleVisitors; ?> </h4>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius text-dark" id="maleProgress" style="width: <?php echo $percent; ?>%"></div>
+                </div>
+                <h6 class='p-2' id="malePercentage"><?php echo $percent; ?>%</h6>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4 class='fw-bold'><i class="fa fa-female" style="font-size: 4rem; color: #0000ff"> </i> Female = <?php echo $filterfemaleVisitors; ?> </h4>
+                <div class="p-1 w-100 custom-color radius d-flex justify-content-start justify-items-center">
+                    <div class="bg-light p-2 radius" id="femaleProgress" style="width: <?php echo $percent1; ?>%"></div>
+                </div>
+                <h6 class='p-2' id="femalePercentage"><?php echo $percent1; ?>%</h6>
+            </div>
+		<?php
+		
+	}
+
 
 ?>

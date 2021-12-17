@@ -147,19 +147,55 @@ function localProducts(){
     });
 }
 
-// Products info in dashboard
-function Analizing(){
+
+
+// Analayzing Products info in dashboard
+function analyzingProducts(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/products_categories.php',
             data: {
                 userid: $userid,
-                Analizing: 1
+                analyzingProducts: 1
             },
             success:function(data){
-                $('#Analizing').html(data);
+                $('#analyzingProducts').html(data);
+            }
+        });
+    }
+}
+// Analayzing Orders info in dashboard
+function analyzingOrders(){
+    $userid = $('#userid').val();
+    if ($userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                userid: $userid,
+                analyzingOrders: 1
+            },
+            success:function(data){
+                $('#analyzingOrders').html(data);
+            }
+        });
+    }
+}
+// Analayzing Visitors info in dashboard
+function analyzingVisitors(){
+    $userid = $('#userid').val();
+    if ($userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                userid: $userid,
+                analyzingVisitors: 1
+            },
+            success:function(data){
+                $('#analyzingVisitors').html(data);
             }
         });
     }
@@ -403,6 +439,8 @@ $(document).ready(function () {
 			});
 		}
 	});
+
+
 
 });
 

@@ -136,4 +136,105 @@ class Users extends DbConnection{
         }
     }
 
+
+    // notifications
+    public function fetchNotifications($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT products.id, 
+        products.com_id, 
+        products.p_name, 
+        products.p_desc, 
+        products.p_price, 
+        products.p_img, 
+        products.category, 
+        users.f_name, 
+        users.l_name, 
+        users.image, 
+        carts.p_id, 
+        carts.client_id
+        FROM carts, products, users WHERE products.com_id='$userid' AND products.id=carts.p_id AND carts.client_id=users.id ORDER BY `products`.`id` DESC limit 10";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
+
+    // display if follow product or not
+    public function displayClientResult($userid,$profile_id)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $profile_id = $this->con->real_escape_string($profile_id);
+        $query = "SELECT * FROM `clients` where com_id='$profile_id' and client_id='$userid'";
+        $result = $this->con->query($query);
+        if ($result->num_rows > 0) {
+            return true;
+        }else if($result->num_rows < 1){
+            return false;
+        }
+    }
+    // add follow
+    public function addTheClient($userid,$profile_id)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $profile_id = $this->con->real_escape_string($profile_id);
+        $query = "INSERT INTO `clients` (client_id, com_id) VALUES ('$userid','$profile_id')";
+        $sql = $this->con->query($query);
+    }
+    // delete follow
+    public function deleteTheClient($userid,$profile_id)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $profile_id = $this->con->real_escape_string($profile_id);
+        $query = "DELETE FROM clients WHERE com_id='$profile_id' AND client_id='$userid'";
+        $sql = $this->con->query($query);
+    }
+
+
+    // chaters
+    public function displayChaters($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT 
+        DISTINCT(messages.sender),(messages.reciever),(messages.create_at),(users.id),(users.image),(users.f_name),(users.type)
+        FROM messages, users WHERE messages.sender!='$userid'AND messages.reciever='$userid' AND messages.sender=users.id ORDER BY `messages`.`create_at` DESC ";
+        // $sql = $this->con->query($query);
+        // $row = $sql->fetch_array();
+        // $theUserId = $row['id'];
+        // $query = "SELECT * FROM messages left join users on messages.reciever=users.id WHERE reciever='$userid' limit 225";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+    // fetch all msgs
+    public function displayChating($userid,$chaterid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $chaterid = $this->con->real_escape_string($chaterid);
+        $query = "SELECT * FROM `messages` order by create_at desc";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
 }

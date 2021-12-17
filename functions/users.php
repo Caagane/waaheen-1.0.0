@@ -1,6 +1,6 @@
 <?php
-session_start();
 	// Include database file
+	include_once('../classes/DB_conn.php');
 	include '../classes/Users.php';
 	
 	$usersOj = new Users();
@@ -70,7 +70,7 @@ session_start();
 			?>
 
 				<div class="row m-auto justify-content-center" id="profileInfo">
-                    <div class="col-md-9 col-sm-12 light-bg border radius mt-2 mb-2 p-5">
+                    <div class="col-md-9 col-sm-12 light-bg border radius mt-2 mb-2 p-3 px-5">
                         <div class="p-1">
                             <h4> <i class="fa fa-gift"></i> About Our <span class="fw-bold"> <?php echo $info['role'] ?> </span></h4>
                         </div>
@@ -78,7 +78,7 @@ session_start();
                             <h6> <?php echo $info['role_desc'] ?> </h6>
                         </div>
                     </div>
-                    <div class="col-md-9 col-sm-12 light-bg border radius mb-2 p-5">
+                    <div class="col-md-9 col-sm-12 light-bg border radius mb-2 p-3 px-5">
                         <div class="p-1">
                             <h4> <i class="fa fa-truck"></i> 
 								Delivery System: 
@@ -95,7 +95,7 @@ session_start();
                             <h6><?php echo $info['delivery_desc'] ?></h6>
                         </div>
                     </div>
-                    <div class="col-md-9 col-sm-12 light-bg border radius mb-2 p-5">
+                    <div class="col-md-9 col-sm-12 light-bg border radius mb-2 p-3 px-5">
                         <div class="p-1 d-flex">
                             <h3> <i class="fa fa-map-marker-alt"></i> Address </h3>
                             <!-- <h6 class="p-2"> 2km</h6> -->
@@ -126,10 +126,12 @@ session_start();
 		if (!$allCarts) {
 			echo '<h6 class="col-md-12 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-gifts w-100" style="font-size: 50px;"></i> No Carts !!!</h6>';
 		} else {
+			?>
+			<div class="row m-auto justify-content-center px-md-5 mx-md-5" id="profileInfo">
+			<?php
 			foreach ($allCarts as $carts) {
 			?>
-				<div class="row m-auto justify-content-center" id="profileInfo">
-					<div class="col-md-9 col-sm-12 light-bg border radius mt-2 mb-2 p-3">
+					<div class="col-md-5 col-sm-12 light-bg border radius mt-2 mx-2 mb-2 p-3">
 							<div class="col-md-12 d-flex text-start">
 								<?php
 									if ($carts['image'] == "") {
@@ -148,20 +150,215 @@ session_start();
 								</div>
 							</div>
 
-							<div class="col-md-4 col-sm-12 float-md-start">
-								<div class="product-img" style="background-image: url('./img/products/<?php echo $carts['p_img']; ?>')"></div>
+							<div class="col-md-4 col-sm-12 float-md-start text-center justify-content-center justify-items-center">
+								<div class="product-img border m-auto" style="background-image: url('./img/products/<?php echo $carts['p_img']; ?>');"></div>
 							</div>
 
-							<div class="col-md-8 col-sm-12 px-3 float-md-end">
+							<div class="col-md-8 col-sm-12 px-3 float-md-end text-center text-md-start justify-content-center justify-items-center">
 								<h5 class="mt-2"><?php echo $carts['p_name']; ?></h5>
 								<h6><?php echo $carts['p_price']; ?></h6>
 
 								<a href="products-details.php?productid=<?php echo $carts['id']; ?>&com_id=<?php echo $carts['com_id']; ?>&com-f-name=<?php echo $carts['f_name']; ?>&com-l-name=<?php echo $carts['l_name']; ?>&product-name=<?php echo $carts['p_name']; ?>&product-price=<?php echo $carts['p_price']; ?>&product-desc=<?php echo $carts['p_desc']; ?>&product-img=<?php echo $carts['p_img']; ?>&category=<?php echo $carts['category']; ?>" class="btn btn-primary custom-color px-4 text-center">Update Order</a>
 							</div>
 					</div>
-				</div>
 
 			<?php
+			}
+			?>
+			</div>
+			<?php
+		}
+	}
+
+
+
+	
+	if(isset($_POST['fetchNotifications'])) {
+			
+		$userid = $_POST['userid']; 
+		
+		$allnotifications = $usersOj->fetchNotifications($userid);
+
+		
+		echo '<h4 class="col-md-12 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-shopping-cart" style="font-size: 30px;"></i> <i class="fa fa-gifts" style="font-size: 20px; margin-left: -8px"></i> Your Orders History </h4>';
+
+		if (!$allnotifications) {
+			echo '<h6 class="col-md-12 col-sm-12 text-center mb-3 mt-5 fw-bold"> <i class="fa fa-gifts w-100" style="font-size: 50px;"></i> No Carts !!!</h6>';
+		} else {
+			?>
+			<div class="row m-auto justify-content-center px-md-5 mx-md-5" id="profileInfo">
+			<?php
+			foreach ($allnotifications as $notifications) {
+			?>
+					<div class="col-md-5 col-sm-12 light-bg border radius mt-2 mx-2 mb-2 p-3">
+							<div class="col-md-12 d-flex text-start">
+								<?php
+									if ($carts['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $carts['image']; ?>')"></div>
+										<?php
+									}
+								?>
+								<div class="px-2 ">
+									<h6><?php echo $carts['f_name'].' '. $carts['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+								</div>
+							</div>
+
+							<div class="col-md-4 col-sm-12 float-md-start text-center justify-content-center justify-items-center">
+								<div class="product-img border m-auto" style="background-image: url('./img/products/<?php echo $carts['p_img']; ?>');"></div>
+							</div>
+
+							<div class="col-md-8 col-sm-12 px-3 float-md-end text-center text-md-start justify-content-center justify-items-center">
+								<h5 class="mt-2"><?php echo $carts['p_name']; ?></h5>
+								<h6><?php echo $carts['p_price']; ?></h6>
+
+								<a href="products-details.php?productid=<?php echo $carts['id']; ?>&com_id=<?php echo $carts['com_id']; ?>&com-f-name=<?php echo $carts['f_name']; ?>&com-l-name=<?php echo $carts['l_name']; ?>&product-name=<?php echo $carts['p_name']; ?>&product-price=<?php echo $carts['p_price']; ?>&product-desc=<?php echo $carts['p_desc']; ?>&product-img=<?php echo $carts['p_img']; ?>&category=<?php echo $carts['category']; ?>" class="btn btn-primary custom-color px-4 text-center">Update Order</a>
+							</div>
+					</div>
+
+			<?php
+			}
+			?>
+			</div>
+			<?php
+		}
+	}
+
+	// Display Follow Result
+	if(isset($_POST['clientResult'])){
+		$userid = $_POST['userid'];
+		$profile_id = $_POST['profile_id'];
+		$clientResult = $usersOj->displayClientResult($userid,$profile_id); 
+		if (!$clientResult) {
+			echo 'false';
+		} else {
+			echo 'true';
+		}
+	}
+	// add client
+	if(isset($_POST['client'])){
+		$userid = $_POST['userid'];
+		$profile_id = $_POST['profile_id'];
+		$addClient = $usersOj->addTheClient($userid,$profile_id); 
+	}
+	// delete client
+	if(isset($_POST['unClient'])){
+		$userid = $_POST['userid'];
+		$profile_id = $_POST['profile_id'];
+		$deleteClient = $usersOj->deleteTheClient($userid,$profile_id); 
+	}
+
+	// chaters
+	if(isset($_POST['chaters'])){
+		$userid = $_POST['userid'];
+		$chaters = $usersOj->displayChaters($userid); 
+		if ($chaters) {
+			foreach ($chaters as $chater) {
+				if ($chater) {
+					
+				}
+				?>
+
+				<script>
+					$(document).ready(function () {
+						$('#theChater<?php echo $chater['id']; ?>').click(function(){
+							$('#chaterid').val(<?php echo $chater['id']; ?>);
+							$chaterName = '<a href="profile" class="btn shadow-none text-dark" style="font-weight:bold;margin-left:-10px;"> <?php echo $chater['f_name']; ?> </a>';
+							$('.chaterName').html($chaterName);
+							
+							<?php
+								if ($chater['type'] == "" && $chater['image'] == "") {
+									?>
+										$('#chaterImage').html('<i class="fa fa-user rounded-circle float-start m-0" style="font-size:24px;padding-left:30px;padding-top:5px;"></i>');
+										document.getElementById('chaterImage').style.backgroundImage = "";
+									<?php
+								} elseif ($chater['type'] == "company" && $chater['image'] == "") {
+									?>
+										$('#chaterImage').html('<i class="fa fa-building rounded-circle float-start m-0" style="font-size:24px;padding-left:30px;padding-top:5px;"></i>');
+										document.getElementById('chaterImage').style.backgroundImage = "";
+									<?php
+								} else {
+									?>
+										$('#chaterImage').html('');
+										document.getElementById('chaterImage').style.backgroundImage = " url('./img/profiles/<?php echo $chater['image']; ?>')";
+									<?php
+								}
+							?>
+							
+							chating();
+						});
+					});
+				</script>
+					<div class="radius text-dark p-1" id="theChater<?php echo $chater['id']; ?>" style="cursor:pointer">
+						<div class="d-flex text-start">
+							<?php 
+								if ($chater['image'] == "" && $chater['type'] == "") {
+									?>
+										<i class="fa fa-user border rounded-circle p-3 px-3 float-start m-0"></i>
+									<?php
+								} elseif ($chater['image'] == "" && $chater['type'] == "company") {
+									?>
+										<i class="fa fa-building border rounded-circle p-3 px-3 float-start m-0"></i>
+									<?php
+								} else {
+									?>
+										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $chater['image']; ?>')"></div>
+									<?php
+								}
+							?>
+
+							<div class="px-2 ">
+								<p style="margin-top: 10px; font-weight:bold;"> <?php echo $chater['f_name']; ?> </p>
+							</div>
+						</div>
+					</div>
+				<?php
+			}
+		} else {
+			?>
+				<div class="w-100 d-flex flex-column justify-content-center justify-items-center text-center" style="height:100%;">
+                    <div>
+						<i class="fa fa-user" style="font-size:50px; color:#666;"></i>
+						<i class="fab fa-facebook-messenger" style="font-size:30px; color:#666;"></i>
+					</div>
+                    <h6>No Message Yet</h6>
+                </div>
+			<?php
+		}
+	}
+
+	
+	if(isset($_POST['chating'])){
+		$userid = $_POST['userid'];
+		$chaterid = $_POST['chaterid'];
+		$chating = $usersOj->displayChating($userid,$chaterid); 
+		if (!$chating) {
+
+		}else {
+			foreach ($chating as $chat) {
+				if ($chat['sender'] == $chaterid) {
+					?>
+					<div class="border radius p-2 custom-color received">
+					<?php echo $chat['message']; ?>
+						<span class="received text-start w-100" style="font-size:12px;"> <i class="fa fa-clock"></i> <?php echo $chat['create_at']; ?></span>
+					</div>
+					
+					<hr style="width:100%;float:left;margin: -50px 0px; background:transparent">
+					<?php
+				} elseif ($chat['sender'] == $userid) {
+					?>
+					<div class="border radius p-2 bg-white sended">
+						<?php echo $chat['message']; ?>
+						<span class="sended text-end w-100" style="font-size:12px;"> <i class="fa fa-clock"></i> <?php echo $chat['create_at']; ?></span>
+					</div>
+					<hr style="width:100%;float:left;margin: -50px 0px; background:transparent">
+					<?php
+				}
 			}
 		}
 	}

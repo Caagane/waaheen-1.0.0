@@ -20,6 +20,15 @@ CREATE TABLE users (
     create_at DATE DEFAULT now(),
     update_at DATE DEFAULT now()
 );
+CREATE TABLE clients (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    client_id int(50),
+    com_id int(50),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (client_id)  references users (id) on delete cascade,
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
 CREATE TABLE com_info (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
     com_id int(50),

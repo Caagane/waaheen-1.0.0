@@ -244,22 +244,22 @@ if (!$_SESSION['waaheen_user_id']) {
           <span class="navbar-toggler-icon" />
         </button>
         <div class="collapse navbar-collapse justify-content-around aling-items-center text-center" id="navbar">
-          <a href="/home" class="navbar-brand brand-on-desktop"><span class="text-white fw-bold">Waaheen</span></a>
+          <a href="./" class="navbar-brand brand-on-desktop"><span class="text-white fw-bold">Waaheen</span></a>
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a href="/home" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-home nav-icons"></i> Home</a>
+              <a href="./" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-home nav-icons"></i> Home</a>
             </li>
             <li class="nav-item">
-              <a href="/search" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-search nav-icons"></i> Search</a>
+              <a href="search" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-search nav-icons"></i> Search</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="/news" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-pen nav-icons"></i> News</a>
-            </li>
+            </li> -->
             <?php
               if ($_SESSION['waaheen_user_id'] != 0) {
                 ?>
               <li class="nav-item">
-                <a href="" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-bell nav-icons"></i> Notifications</a>
+                <a href="notifications" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-bell nav-icons"></i> Notifications</a>
               </li>
               <?php
               }
@@ -277,13 +277,13 @@ if (!$_SESSION['waaheen_user_id']) {
               else {
                 ?>
                 <li class="nav-item">
-                  <a href="/profile" class="nav-link text-light btn-sm"><i class="fab fa-facebook-messenger nav-icons"></i></a>
+                  <a href="messages" class="nav-link text-light btn-sm"><i class="fab fa-facebook-messenger nav-icons"></i></a>
                 </li>
                 <li class="nav-item">
-                  <a href="carts.php" class="nav-link text-light btn-sm"><i class="fa fa-shopping-cart nav-icons"></i></a>
+                  <a href="carts" class="nav-link text-light btn-sm"><i class="fa fa-shopping-cart nav-icons"></i></a>
                 </li>
                 <li class="nav-item">
-                  <a href="/profile" class="nav-link text-light btn-sm"><i class="fa fa-user nav-icons"></i></a>
+                  <button class="btn nav-link text-light btn-sm"><i class="fa fa-user nav-icons"></i></button>
                 </li>
                 <?php
               }
@@ -294,7 +294,7 @@ if (!$_SESSION['waaheen_user_id']) {
       <div class="p-3 bg-white d-flex flex-column profile-drop-down rounded border">
         <a href="#" class="w-100">Profile</a>
         <a href="settings.php" class="w-100">Settings</a>
-        <a href="#" class="w-100">SignOut</a>
+        <a href="SignOut" class="w-100">SignOut</a>
       </div>
     </nav>
 
