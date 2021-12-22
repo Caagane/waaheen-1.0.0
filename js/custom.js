@@ -1,11 +1,35 @@
-
-$('#openLogin').click(function(){
-    $('#loginForm').modal('show');
+// Login 
+$('#showLoginModel').click(function(){
+    document.getElementById('loginModel').style.display='block';
+});
+$('#hideLoginModel').click(function(){
+    document.getElementById('loginModel').style.display='none';
 });
 
-$('#closeLogin').click(function(){
-    $('#loginForm').modal('hide');
+
+
+$('.userBtn').click(function(){
+    if (document.querySelector('.profileLinks').style.display = 'none'){
+        document.querySelector('.profileLinks').style.display = 'block';
+        document.querySelector('.userBtn').style.display = 'none';
+        document.querySelector('.userBtn1').style.display = 'block';
+    }
 });
+$('.userBtn1').click(function(){
+    if (document.querySelector('.profileLinks').style.display = 'block'){
+        document.querySelector('.profileLinks').style.display = 'none';
+        document.querySelector('.userBtn').style.display = 'block';
+        document.querySelector('.userBtn1').style.display = 'none';
+    }
+});
+$('.userBtn2').click(function(){
+    if (document.querySelector('.profileLinks').style.display = 'block'){
+        document.querySelector('.profileLinks').style.display = 'none';
+        document.querySelector('.userBtn').style.display = 'block';
+        document.querySelector('.userBtn1').style.display = 'none';
+    }
+});
+
 
 // Dashboard models
 // Product Form
@@ -30,6 +54,7 @@ $('#closeDeleteProducts').click(function(){
 $('#openSwitch').click(function(){
     $('#switchModel').modal('show');
 });
+
 // close switch model
 $('#closeSwitch').click(function(){
     $('#switchModel').modal('hide');

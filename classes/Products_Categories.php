@@ -115,9 +115,11 @@ class Products_Categories extends DbConnection{
     }
 
     // All Peoducts in Local Area
-    public function localProducts()
+    public function localProducts($city,$country)
     {
-        // $com_id = $this->con->real_escape_string($com_id);
+        $city = $this->con->real_escape_string($city);
+        $country = $this->con->real_escape_string($country);
+
         $query = "SELECT products.id, 
         products.com_id, 
         products.p_name, 
@@ -127,8 +129,10 @@ class Products_Categories extends DbConnection{
         products.category, 
         users.f_name, 
         users.l_name, 
-        users.image 
-        FROM products, users WHERE products.com_id=users.id ORDER BY `products`.`id` DESC limit 8";
+        users.image,
+        users.city,
+        users.country
+        FROM products, users WHERE products.com_id=users.id AND (city='$city') ORDER BY `products`.`id` DESC limit 12";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -171,10 +175,13 @@ class Products_Categories extends DbConnection{
     }
 
     // Search Products 
-    public function search_products($search,$dist)
+    public function search_products($search,$city,$country)
     {
         $search = $this->con->real_escape_string($search);
-        $query = "SELECT * FROM `products` left join users on products.com_id=users.id WHERE f_name LIKE '%".$search."%' OR l_name LIKE '%".$search."%' OR p_name LIKE '%".$search."%' OR p_desc LIKE '%".$search."%'  OR category LIKE '%".$search."%' ORDER BY `products`.`id` desc";
+        $councitytry = $this->con->real_escape_string($city);
+        $country = $this->con->real_escape_string($country);
+        
+        $query = "SELECT * FROM `users` left join products on products.com_id=users.id WHERE p_name LIKE '%$search%' OR p_desc LIKE '%$search%' OR category LIKE '%$search%' ORDER BY `products`.`id` desc LIMIT 16";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -201,6 +208,15 @@ class Products_Categories extends DbConnection{
         }else if($result->num_rows == 0){
             return false;
         }
+    }
+    // product visitors counter
+    public function visitCounter($userid,$product_id,$com_id)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $product_id = $this->con->real_escape_string($product_id);
+        $com_id = $this->con->real_escape_string($com_id);
+        $query = "INSERT INTO `visitors` (p_id, client_id, com_id) VALUES ('$product_id','$userid','$com_id')";
+        $sql = $this->con->query($query);
     }
     // add order
     public function addTheOrder($userid,$product_id,$quantity)
@@ -240,6 +256,14 @@ class Products_Categories extends DbConnection{
     {
         $product_id = $this->con->real_escape_string($product_id);
         $query = "SELECT * FROM `products_likes` where p_id='$product_id'";
+        $result = $this->con->query($query);
+        echo $result->num_rows;
+    }
+    // products visitors counter
+    public function ProductVisitorsCounter($product_id)
+    {
+        $product_id = $this->con->real_escape_string($product_id);
+        $query = "SELECT * FROM `visitors` where p_id='$product_id'";
         $result = $this->con->query($query);
         echo $result->num_rows;
     }

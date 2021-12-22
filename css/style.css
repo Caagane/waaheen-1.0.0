@@ -10,6 +10,20 @@ body {
 
 
 /* All Custom Styles */
+.custom_model{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    backdrop-filter: blur(5px);
+    box-shadow: 0.5px 1px 10px 1px #e0e0e018;
+    background: #0000002d;
+    z-index: 99999999;
+    display: none;
+    overflow-x: hidden;
+}
+
 .color {
     color: #555555;
 }
@@ -30,6 +44,11 @@ body {
 
 .light-bg{
     background: #f2f2f23a;
+    backdrop-filter: blur(5px);
+    box-shadow: 0.5px 1px 10px 1px #ffffff4d;
+}
+.light-bg1{
+    background: #ffffffb2;
     backdrop-filter: blur(5px);
     box-shadow: 0.5px 1px 10px 1px #e0e0e018;
 }
@@ -69,7 +88,11 @@ a {
     text-align: center;
     overflow: hidden;
     z-index: 10;
+    display: flex;
 }
+.profileLinks{
+    display: none;
+} 
 
 /* Posts */
 .posts {
@@ -229,7 +252,7 @@ a {
 }
 .product-img {
     width: 100%;
-    height: 150px;
+    height: 100px;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -458,6 +481,16 @@ a {
         bottom: 0%;
         z-index: 9999999;
         border-radius: 0px;
+    }
+    
+    .profile-drop-down {
+        position: fixed;
+        top: 50%;
+        right: 33.3%;
+        width: 33.3%;
+        text-align: center;
+        overflow: hidden;
+        z-index: 10;
     }
 
 }

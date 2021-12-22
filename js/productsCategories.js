@@ -58,6 +58,27 @@ function relatedProducts(){
     }
 }
 
+// visitor Counter
+function visitCounter(){
+    $com_id = $('#com_id').val();
+    $product_id = $('#product_id').val();
+    $userid = $('#userid').val();
+    if ($com_id != "" && $productCategory != "" && $userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/products_categories.php',
+            data: {
+                com_id: $com_id,
+                product_id: $product_id,
+                userid: $userid,
+                visitCounter: 1
+            },
+            success:function(){
+            }
+        });
+    }
+}
+
 // display if orderd already or not
 function orderResult(){
     $userid = $('#userid').val();
@@ -132,13 +153,14 @@ function ProductLikesCounter(){
 
 // Products in User's Local Area
 function localProducts(){
-    // $com_id = $('#dashboard_com_id').val();
-    // alert($categories);
+    $city = $('#city').val();
+    $country = $('#country').val();
     $.ajax({
         type: 'POST',
         url: 'functions/products_categories.php',
         data: {
-            // com_id: $com_id,
+            city: $city,
+            country: $country,
             localProducts: 1
         },
         success:function(data){
@@ -326,14 +348,16 @@ $(document).ready(function () {
 	// Serch Product in Search Page
     $('#searchBtn').click(function(){
 		$search = $('#search').val();
-		$dist = $('#dist').val();
+        $city = $('#city').val();
+        $country = $('#country').val();
 		if($search !=''){
             $.ajax({
                 type: 'POST',
                 url: 'functions/products_categories.php',
                 data: {
                     search: $search,
-                    dist: $dist,
+                    city: $city,
+                    country: $country,
                     SearchProduct: 1
                 },
                 success:function(data){

@@ -1,9 +1,13 @@
 // near Companies in local areal
 function localCompanies(){
+    $city = $('#city').val();
+    $country = $('#country').val();
     $.ajax({
         type: 'POST',
         url: 'functions/users.php',
         data: {
+            city: $city,
+            country: $country,
             localCompanies: 1
         },
         success:function(data){
@@ -130,6 +134,42 @@ function clientResult(){
     }
 }
 
+// Preparing notifications!!!
+function addNotifications(){
+    $userid = $('#userid').val();
+    $.ajax({
+        type: 'POST',
+        url: 'functions/users.php',
+        data: {
+            userid: $userid,
+            addNotifications: 1
+        },
+        success:function(){
+        }
+    });
+}
+// Count Notifications
+function countNotifications(){
+    $userid = $('#userid').val();
+    $.ajax({
+        type: 'POST',
+        url: 'functions/users.php',
+        data: {
+            userid: $userid,
+            countNotifications: 1
+        },
+        success:function(data){
+            if (data != "false") {
+                document.getElementById('countNoti').style.display='block';
+                $('#countNoti').html(data);
+            } else {
+                document.getElementById('countNoti').style.display='none';
+            }
+        }
+    });
+}
+
+
 
 $(document).ready(function () {
     
@@ -210,6 +250,35 @@ $(document).ready(function () {
                     document.getElementById('unClient').style.opacity = '100%';
 				}
 			});
+		}
+	});
+
+    // sending a message
+    $('#sendmsg').click(function(){
+		$userid = $('#userid').val();
+		$chaterid = $('#chaterid').val();
+		$message = $('#message').val();
+		if ($chaterid != "" && $userid != "0") {
+            if ($message != "") {
+                document.getElementById('sendmsg').style.pointerEvents = 'none';
+                document.getElementById('sendmsg').style.opacity = '80%';
+                $.ajax({
+                    type: 'POST',
+                    url: 'functions/users.php',
+                    data: {
+                        userid:$userid,
+                        chaterid: $chaterid,
+                        message: $message,
+                        sendmsg: 1
+                    },
+                    success:function(){
+                        $chaterid = '';
+                        chating();
+                        document.getElementById('sendmsg').style.pointerEvents = 'visible';
+                        document.getElementById('sendmsg').style.opacity = '100%';
+                    }
+                });
+            }
 		}
 	});
 

@@ -7,8 +7,9 @@
 
 	// Companies in Local Area
 	if(isset($_POST['localCompanies'])){
-		// $userid = $_POST['userid'];
-		$localCompanies = $usersOj->localCompanies(); 
+		$city = $_POST['city'];
+		$country = $_POST['country'];
+		$localCompanies = $usersOj->localCompanies($city,$country); 
 		if (!$localCompanies) {
 			?>
 			<i class="fa fa-city" style="font-size:50px;"></i>
@@ -21,7 +22,9 @@
                     <?php
 						if ($localCompany['image'] == "") {
 							?>
-								<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+							<div class="justify-content-center text-center justify-items-center pt-2" style="font-size: 50px; height: 150px">
+								<i class="fa fa-building text-center w-100 border radius rounded-circle py-5"></i>
+							</div>
 							<?php
 						} else {
 							?>
@@ -29,7 +32,7 @@
 							<?php
 						}
 					?>
-                    <h6 class="my-2"><?php echo $localCompany['f_name']; ?> <?php echo $localCompany['l_name']; ?></h6>
+                    <h6 class="my-2 text-center"><?php echo $localCompany['f_name']; ?> <?php echo $localCompany['l_name']; ?></h6>
                     <a href="profile.php?profile_id=<?php echo $localCompany['id']; ?>" class="btn btn-sm btn-primary custom-color w-100 text-center">See Profile</a>
                 </div>
 				<?php
@@ -259,9 +262,6 @@
 		$chaters = $usersOj->displayChaters($userid); 
 		if ($chaters) {
 			foreach ($chaters as $chater) {
-				if ($chater) {
-					
-				}
 				?>
 
 				<script>
@@ -294,7 +294,8 @@
 						});
 					});
 				</script>
-					<div class="radius text-dark p-1" id="theChater<?php echo $chater['id']; ?>" style="cursor:pointer">
+
+					<div class="radius text-dark p-1 theChater" id="theChater<?php echo $chater['id']; ?>" style="cursor:pointer">
 						<div class="d-flex text-start">
 							<?php 
 								if ($chater['image'] == "" && $chater['type'] == "") {
@@ -341,6 +342,7 @@
 
 		}else {
 			foreach ($chating as $chat) {
+
 				if ($chat['sender'] == $chaterid) {
 					?>
 					<div class="border radius p-2 custom-color received">
@@ -359,7 +361,89 @@
 					<hr style="width:100%;float:left;margin: -50px 0px; background:transparent">
 					<?php
 				}
+
 			}
+		}
+	}
+
+
+	if(isset($_POST['sendmsg'])) {
+		$userid = $_POST['userid'];
+		$chaterid = $_POST['chaterid'];
+		$message = $_POST['message'];
+		$sendmsg = $usersOj->sendmsg($userid,$chaterid,$message);
+	}
+
+
+
+	
+	// Check all avaliable notifications
+	if(isset($_POST['addNotifications'])) {
+		$userid = $_POST['userid'];
+		// check if user is a client to get new products from their companies
+		$notifications = $usersOj->am_i_clent($userid);
+		if (!$notifications) {
+		}
+		else {
+			foreach ($notifications as $notification) {
+				$com_id = $notification['com_id'];
+				// fetch all products
+				$newProducts = $usersOj->newProduct($userid,$com_id);
+				foreach ($newProducts as $newProduct) {
+					$noti_id = $newProduct['id'];
+					$date = $newProduct['create_at'];
+					$type = 'new product';
+					$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+				}
+
+			}
+		}
+
+		// check all user's products
+		$notifications1 = $usersOj->myProducts($userid);
+		if (!$notifications1) {
+		}
+		else {
+			// then send to the class to check new likes
+			foreach ($notifications1 as $notification) {
+				$p_id = $notification['id'];
+				$newLikes = $usersOj->newLike($userid,$p_id);
+				// if there is a new like then insert into notification table
+				foreach ($newLikes as $newLike) {
+					$noti_id = $newLike['id'];
+					$date = $newLike['create_at'];
+					$type = 'new like';
+					$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+				}
+
+			}
+		}
+
+		// first fetch all clients
+		$newClients = $usersOj->newClient($userid);
+		if (!$newClients) {
+		}else {
+			// and then send earch client to the classs to insert if there is a new client
+			foreach ($newClients as $newClient) {
+				$noti_id = $newClient['client_id'];
+				$date = $newLike['create_at'];
+				$type = 'new client';
+				$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+			}
+		}
+
+	}
+
+
+	// count all notifications 
+	if(isset($_POST['countNotifications'])) {
+		$userid = $_POST['userid'];
+		$countNotifications = $usersOj->countNotifications($userid);
+		if (!$countNotifications) {
+			echo 'false';
+		}
+		else {
+			echo $countNotifications;
 		}
 	}
 

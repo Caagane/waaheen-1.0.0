@@ -17,6 +17,15 @@
 <script src="js/signin_signup.js"></script>
 <script src="js/custom.js"></script>
 
+<script>
+  $(document).ready(function () {
+      
+    // Load all notifications
+    addNotifications();
+    countNotifications();
+
+  });
+</script>
 
 </body>
 </html>

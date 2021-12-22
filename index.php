@@ -6,13 +6,13 @@
     <section class="py-5 custom-color">
         <div class="container pt-5 mt-5">
           <div class="row pt-1 text-center">
-            <div class="col-md-6 col-sm-6">
-              <img src="./img/asset/home.svg" alt="" class="img-fluid w-50 float-end" />
+            <div class="col-md-6 col-sm-6 order-md-2">
+              <img src="./img/asset/home.svg" alt="" class="img-fluid w-50 float-center float-md-start" />
             </div>
-            <div class="col-md-6 col-sm-6 p-4 d-flex flex-column justify-content-center float-start text-start">
-              <h1>Hi!, Welcome in</h1>
-              <p class="lead" style="margin: -5px 0">-The Middle of <span class="fw-bold">Shopping Oceacn</span></p>
-              <p class="lead"><span class="fw-bold">Swim</span> as you <span class="fw-bold">Can</span>!!!</p>
+            <div class="col-md-6 col-sm-6 order-md-1 p-4 d-flex flex-column justify-content-center float-start text-center text-md-end">
+              <h1 class="fw-bold">Hi!, You Are On</h1>
+              <h3><span class="fw-bold">Ocean Of Shopping,</span></h3>
+              <h5 class=""><span class="fw-bold">Swim</span> as you <span class="fw-bold">Can</span>!!!</h5>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
       </div>  -->
 
       <div class="container px-lg-5 mb-5">
-          <h4 class="col-md-12 col-sm-12 text-start fw-bold"> <i class="fa fa-building"></i> Local Companies</h4>
+          <h4 class="col-md-12 col-sm-12 text-center fw-bold"> <i class="fa fa-building"></i> Trending Companies in <span style="color: #5900ff;"><?php echo $city; ?></span> </h4>
           <div class="row">
             <div class="m-auto near-com-wrapper" id="localCompanies">
             </div>
@@ -87,7 +87,7 @@
 
 
       <div class="container px-lg-5 mb-5">
-          <h4 class="col-md-12 text-start fw-bold"> <i class="fa fa-gifts"></i> Trending Products in Your Area</h4>
+          <h4 class="col-md-12 text-center fw-bold"> <i class="fa fa-gifts"></i> Trending Products in <span style="color: #5900ff;"><?php echo $city; ?></span> </h4>
         <div class="row">
             <div id="localProducts" class=" py-3 row g-2 overflow-hidden justify-content-evenly text-center m-auto">
 
@@ -95,9 +95,6 @@
         </div>
     </div>
 
-
-
-<h1><?php echo $_SESSION['waaheen_user_id'] ?></h1>
     
 
 
@@ -114,3 +111,5 @@
 
   });
 </script>
+
+

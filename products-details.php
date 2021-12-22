@@ -7,7 +7,17 @@
       <div class="row m-1 mb-5 light-bg px-2 py-4 p-md-5 border radius">
         <div class="col-md-12">
           <div class="d-flex text-start">
-            <div class="img img-fluid" style="background-image: url('./img/profiles/com.png')"></div>
+            <?php
+								if (empty($_GET['com_img'])) {
+									?>
+										<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+									<?php
+								} else {
+									?>
+									<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $_GET['com_img']; ?>')"></div>
+									<?php
+								}
+            ?>
 						<div class="px-2 ">
 							<h6><?php  echo $_GET['com-f-name'];?> <?php  echo $_GET['com-l-name'];?></h6>
 							<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
@@ -33,20 +43,41 @@
                   <input type="number" class="form-control" placeholder="Quantity" id="quantity">
                 </div>
               </div>
-          <div class="d-md-flex justify-content-center justify-content-md-start mb-3 ">
+        <?php
+        if ($_SESSION['waaheen_user_id'] == "0" || $_SESSION['waaheen_user_id'] == $_GET['com_id']) {
+        ?>
+          <div class="d-md-flex justify-content-center justify-content-md-start mb-3 " style="pointer-events: none; opacity:33%">
               <div class="col-md-6 col-sm-12 my-3 me-md-3" id="order">
                 <button class="w-100 btn rounded px-5 btn-primary custom-color" id="addOrder" style="display:none;">Order Now</button>
                 <button class="w-100 btn rounded px-5 btn-danger" id="deleteOrder" style="display:none;">Cancel Order</button>
               </div>
-
+              
               <div class="col-md-6 col-sm-12 my-3 d-flex">
                 <button class="btn rounded me-1 border light-bg" style="display:none;" id="addProductLike"> <i class="fa fa-heart"></i> <span id="allProductLikes1"></span> </button>
                 <button class="btn rounded me-1 border light-bg" style="display:none;" id="deleteProductLike"> <i class="fa fa-heart text-danger"></i> <span id="allProductLikes2"></span> </button>
                 
                 <button class="btn rounded ms-1 border light-bg"> <i class="fab fa-facebook-messenger"></i> Message </button>
               </div>
-
           </div>
+          <?php
+        } else {
+          ?>
+            <div class="d-md-flex justify-content-center justify-content-md-start mb-3 ">
+                <div class="col-md-6 col-sm-12 my-3 me-md-3" id="order">
+                  <button class="w-100 btn rounded px-5 btn-primary custom-color" id="addOrder" style="display:none;">Order Now</button>
+                  <button class="w-100 btn rounded px-5 btn-danger" id="deleteOrder" style="display:none;">Cancel Order</button>
+                </div>
+                
+                <div class="col-md-6 col-sm-12 my-3 d-flex">
+                  <button class="btn rounded me-1 border light-bg" style="display:none;" id="addProductLike"> <i class="fa fa-heart"></i> <span id="allProductLikes1"></span> </button>
+                  <button class="btn rounded me-1 border light-bg" style="display:none;" id="deleteProductLike"> <i class="fa fa-heart text-danger"></i> <span id="allProductLikes2"></span> </button>
+                  
+                  <button class="btn rounded ms-1 border light-bg"> <i class="fab fa-facebook-messenger"></i> Message </button>
+                </div>
+            </div>
+            <?php
+        }
+          ?>
           <p class="lead"><?php  echo $_GET['product-desc'];?></p>
         </div>
         </div>
@@ -82,6 +113,8 @@
       ProductLikesCounter();
       // Related Products in Product Details page 
       relatedProducts();
+      // visit counter
+      visitCounter();
   });
 </script>
 

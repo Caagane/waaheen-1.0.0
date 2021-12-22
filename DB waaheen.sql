@@ -135,3 +135,13 @@ CREATE TABLE messages (
     FOREIGN KEY (sender)  references users (id) on delete cascade,
     FOREIGN KEY (reciever)  references users (id) on delete cascade
 );
+CREATE TABLE notifications (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    my_id int(50),
+    noti_id int(50),
+    noti_type varchar(25),
+    view varchar(25),
+    create_at DATE DEFAULT now(),
+    update_at DATE DEFAULT now(),
+    FOREIGN KEY (my_id)  references users (id) on delete cascade
+);

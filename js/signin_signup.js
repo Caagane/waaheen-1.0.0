@@ -65,8 +65,9 @@ $(document).ready(function () {
 				data: loginData,
 				success:function(response){
                     if (response === "Login Successfully") {
-                        document.getElementById('loginResponse').style.color = 'lime';
+                        document.getElementById('loginResponse').style.color = 'green';
                         $('#loginResponse').html(response);
+                        location.reload();
                     } else {
                         document.getElementById('loginResponse').style.color = 'red';
                         $('#loginResponse').html(response);
