@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['waaheen_user_id'])){
+if(empty($_SESSION['waaheen_user_id'])){
   $_SESSION['waaheen_user_id'] = 0;
 }
 
-$city = "Muqdisho"; 
+$city = "hargeisa"; 
 $country = "Somalia"; 
 
 ?>
@@ -52,7 +52,7 @@ $country = "Somalia";
         width: 100%;
         height: 25px;
         animation: animate 25s linear infinite;
-        left: -10%;
+        left: -15%;
         rotate: -100deg;
     }
     .circles li i{
@@ -258,19 +258,16 @@ $country = "Somalia";
             <!-- <li class="nav-item">
               <a href="/news" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-pen nav-icons"></i> News</a>
             </li> -->
-            <?php
-              if ($_SESSION['waaheen_user_id'] != 0) {
-                ?>
-              <li class="nav-item">
-                <a href="notifications" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-bell nav-icons"><span class="bg-danger border rounded-circle p-1" style="width:25px;margin-top:0px;margin-left:-80px;float:right;font-size:10px;display:none" id="countNoti"> </span> </i> Notifications</a>
-              </li>
-              <?php
-              }
-              ?>
+            <li class="nav-item">
+              <a href="products" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-gifts nav-icons"></i> Products</a>
+            </li>
+            <li class="nav-item">
+              <a href="companies" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-building nav-icons"></i> Companies</a>
+            </li>
           </ul>
           <ul class="navbar-nav">
             <?php
-              if ($_SESSION['waaheen_user_id'] == 0) {
+            if(empty($_SESSION['waaheen_user_id'])){
                 ?>
                 <li class="nav-item">
                   <a id="showLoginModel" class="nav-link btn px-4 ms-2 btn-light text-dark btn-sm"><i class="fa fa-sign-in-alt"></i> Sign in</a>
@@ -279,6 +276,9 @@ $country = "Somalia";
               } 
               else {
                 ?>
+                <li class="nav-item">
+                  <a href="notifications" class="nav-link text-light btn-sm fw-bold btn-sm"><i class="fa fa-bell nav-icons"> </i> <span class="bg-danger border rounded-circle" style="padding:2px;width:20px;margin-top:-4px;margin-right:10px;margin-left:-80px;float:right;font-size:10px;display:none" id="countNoti"> </span></a>
+                </li>
                 <li class="nav-item">
                   <a href="messages" class="nav-link text-light btn-sm"><i class="fab fa-facebook-messenger nav-icons"></i></a>
                 </li>
@@ -297,8 +297,8 @@ $country = "Somalia";
       </div>
       <div class="p-3 bg-white flex-column profile-drop-down rounded border profileLinks">
         <a href="dashboard" class="w-100">Profile</a>
-        <a href="settings.php" class="w-100">Settings</a>
-        <a href="SignOut" class="w-100">SignOut</a>
+        <a href="settings" class="w-100">Settings</a>
+        <a href="Signout" class="w-100">SignOut</a>
       </div>
     </nav>
 
@@ -315,9 +315,7 @@ $country = "Somalia";
 
 
 
-
-
-<div class="custom_model custom-scroll" id="loginModel">
+<div class="custom_model custom-scroll" id="loginModel" style="justify-content-center justify-items-center">
 <button id="hideLoginModel" class="btn border radius border btn-lg  float-end py-1 px-3 m-2 m-md-5"><i class="fa fa-times text-white"></i></button>
 <br>
 <section class="my-5">
@@ -326,14 +324,11 @@ $country = "Somalia";
           <div class="light-bg1 radius p-3 border col-md-4 col-sm-12">
             <form id="loginData">
               <p class="text-center lead fw-bold mb-3 me-3">Sign in with</p>
-              <div class="d-flex flex-row align-items-center justify-content-center">
-                <button type="button" class="w-50 btn btn-lg p-2 btn-primary btn-floating me-1">
-                  <i class="fab fa-facebook-f p-2"></i> Facebook
-                </button>
-                <button type="button" class="w-50 btn btn-lg p-2 btn-light border btn-floating ms-1">
-                  <i class="fab fa-google p-2"></i> Google
-                </button>
+              <div class="align-items-center justify-content-center">
+                <div class="facebook"></div>
+                <div class="google"></div>
               </div>
+<!--               
               <div class="divider d-flex align-items-center mb-2 mt-4">
                 <p class="text-center fw-bold mx-3 mb-0">Or</p>
               </div>
@@ -364,7 +359,7 @@ $country = "Somalia";
               <div class="text-center text-lg-start mt-3">
                 <button type="button" name="login" id="login" class="btn p-2 btn-primary my-3 w-50 custom-color" style="padding-left: 2.5rem, padding-right: 2.5rem">Login</button>
                 <p class="lead small mt-2 pt-1 mb-0">Don't have an account? <a class="fw-bold text-dark" href="signup"class="text-body text-primary">Signup With Email</a></p>
-              </div>
+              </div> -->
             </form>
           </div>
         </div>

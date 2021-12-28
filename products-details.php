@@ -56,7 +56,7 @@
                 <button class="btn rounded me-1 border light-bg" style="display:none;" id="addProductLike"> <i class="fa fa-heart"></i> <span id="allProductLikes1"></span> </button>
                 <button class="btn rounded me-1 border light-bg" style="display:none;" id="deleteProductLike"> <i class="fa fa-heart text-danger"></i> <span id="allProductLikes2"></span> </button>
                 
-                <button class="btn rounded ms-1 border light-bg"> <i class="fab fa-facebook-messenger"></i> Message </button>
+                <button class="btn rounded ms-1 border light-bg" id="showMessageModel"> <i class="fab fa-facebook-messenger"></i> Message </button>
               </div>
           </div>
           <?php
@@ -72,7 +72,7 @@
                   <button class="btn rounded me-1 border light-bg" style="display:none;" id="addProductLike"> <i class="fa fa-heart"></i> <span id="allProductLikes1"></span> </button>
                   <button class="btn rounded me-1 border light-bg" style="display:none;" id="deleteProductLike"> <i class="fa fa-heart text-danger"></i> <span id="allProductLikes2"></span> </button>
                   
-                  <button class="btn rounded ms-1 border light-bg"> <i class="fab fa-facebook-messenger"></i> Message </button>
+                  <button class="btn rounded ms-1 border light-bg" id="showMessageModel"> <i class="fab fa-facebook-messenger"></i> Message </button>
                 </div>
             </div>
             <?php
@@ -87,6 +87,9 @@
     <input style="display:none" type="text" id="product_id" value="<?php  echo $_GET['productid'];?>">
     <input style="display:none" type="text" id="com_id" value="<?php  echo $_GET['com_id'];?>">
     <input style="display:none" type="text" id="productCategory" value="<?php  echo $_GET['category'];?>">
+    <input style="display:none" type="text" value="<?php echo $_GET['com_id']; ?>" name="chaterid" id="chaterid">
+    <input style="display:none" type="text" value="<?php echo $_GET['product-name']; ?>" name="msg_from" id="msg_from">
+            
 
     
     <div class="container px-md-5 mb-5">
@@ -97,6 +100,42 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
+
+    <div class="custom_model custom-scroll py-3 pt-md-5" id="messageModel">
+            <div class="col-lg-6 col-sm-12 p-0 m-0 light-bg1 border radius message-bg">
+                        
+                    
+
+                <div class="radius text-dark p-1 header border-none" style="border:none;">
+                  <div class="d-flex text-start border-none justify-content-end" id="chaterInfo" style="border:none;">
+                    <button id="hideMessageModel" class="btn border radius border border-danger float-end py-1 px-2 m-2"><i class="fa fa-times text-danger"></i></button>
+                  </div>
+                </div>
+
+                <div class="messages p-3 custom-scroll"  id="allMessagesBg">
+                    <div class="w-100 d-flex flex-column justify-content-center justify-items-center text-center" style="height:100%;">
+                        <i class="fab fa-facebook-messenger" style="font-size:72px; color:#666;"></i>
+                        <h6>No Message Yet</h6>
+                    </div>
+                </div>
+
+                <div class="form-group d-flex">
+                    <input style="border-radius:0px; border-top-left-radius: 10px; border-bottom-left-radius: 10px;" type="text" class="form-control shadow-none px-3 message" name="message" placeholder="Write a message...">
+                    <button style="border-radius:0px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" class="btn btn-primary shadow-none custom-color px-3" type="button" id="sendmsg">Send</button>
+                </div>
+
+            </div>
+    </div>
+
+
+
 
 
 
@@ -115,6 +154,8 @@
       relatedProducts();
       // visit counter
       visitCounter();
+      // chating
+      chating();
   });
 </script>
 

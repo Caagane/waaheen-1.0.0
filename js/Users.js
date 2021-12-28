@@ -2,12 +2,14 @@
 function localCompanies(){
     $city = $('#city').val();
     $country = $('#country').val();
+    $userid = $('#userid').val();
     $.ajax({
         type: 'POST',
         url: 'functions/users.php',
         data: {
             city: $city,
             country: $country,
+            userid: $userid,
             localCompanies: 1
         },
         success:function(data){
@@ -16,7 +18,27 @@ function localCompanies(){
     });
 }
 
-// near Companies in local areal
+// Trending Companies in local areal
+function trendingCompanies(){
+    $city = $('#city').val();
+    $country = $('#country').val();
+    $userid = $('#userid').val();
+    $.ajax({
+        type: 'POST',
+        url: 'functions/users.php',
+        data: {
+            city: $city,
+            country: $country,
+            userid: $userid,
+            trendingCompanies: 1
+        },
+        success:function(data){
+            $('#trendingCompanies').html(data);
+        }
+    });
+}
+
+// Company info in profile
 function comProfile(){
     $profile_id = $('#profile_id').val();
     if ($profile_id != "") {
@@ -54,23 +76,6 @@ function carts(){
 }
 
 
-// fetch notifications
-function fetchNotifications(){
-    $userid = $('#userid').val();
-    if ($userid != "") {
-        $.ajax({
-            type: 'POST',
-            url: 'functions/users.php',
-            data: {
-                userid: $userid,
-                fetchNotifications: 1
-            },
-            success:function(data){
-                $('#notifications').html(data);
-            }
-        });
-    }
-}
 
 function chaters(){
     $userid = $('#userid').val();
@@ -107,6 +112,10 @@ function chating(){
         });
     }
 }
+function scrollDown(){
+    var objDiv = document.getElementById("allMessagesBg");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
 
 // display if orderd already or not
 function clientResult(){
@@ -135,43 +144,100 @@ function clientResult(){
 }
 
 // Preparing notifications!!!
-function addNotifications(){
+function notifications(){
     $userid = $('#userid').val();
-    $.ajax({
-        type: 'POST',
-        url: 'functions/users.php',
-        data: {
-            userid: $userid,
-            addNotifications: 1
-        },
-        success:function(){
-        }
-    });
+    if ($userid != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/users.php',
+            data: {
+                userid: $userid,
+                notifications: 1
+            },
+            success:function(data){
+                if (data != "false") {
+                    if (data > 99) {
+                        data = '99+';
+                        $('#countNoti').html(data);
+                    } else {
+                        $('#countNoti').html(data);
+                    }
+                    document.getElementById('countNoti').style.display='block';
+                } 
+            }
+        });
+    }
 }
-// Count Notifications
-function countNotifications(){
+// View all Notifications
+function viewNotifications(){
     $userid = $('#userid').val();
+    if ($userid != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/users.php',
+            data: {
+                userid: $userid,
+                viewNotifications: 1
+            },
+            success:function(){
+                
+                if (document.getElementById('countNoti').style.display='block') {
+                    document.getElementById('countNoti').style.display='none';
+                }
+            }
+        });
+    }
+}
+
+// fetch notifications
+function fetchNotifications(){
+    $userid = $('#userid').val();
+    if ($userid != "") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/users.php',
+            data: {
+                userid: $userid,
+                fetchNotifications: 1
+            },
+            success:function(data){
+                $('#notifications').html(data);
+            }
+        });
+    }
+}
+
+function facebook(){
     $.ajax({
         type: 'POST',
-        url: 'functions/users.php',
+        url: 'social_login/facebook.php',
         data: {
-            userid: $userid,
-            countNotifications: 1
+            facebook: 1
         },
         success:function(data){
-            if (data != "false") {
-                document.getElementById('countNoti').style.display='block';
-                $('#countNoti').html(data);
-            } else {
-                document.getElementById('countNoti').style.display='none';
-            }
+            $('.facebook').html(data);
+        }
+    });
+}
+function google(){
+    $.ajax({
+        type: 'POST',
+        url: 'social_login/google.php',
+        data: {
+            google: 1
+        },
+        success:function(data){
+            $('.google').html(data);
         }
     });
 }
 
-
-
 $(document).ready(function () {
+
+
+    facebook();
+    google();
+
     
     $('#switch').click(function(){
 		$user_id = $('#user_id').val();
@@ -191,6 +257,86 @@ $(document).ready(function () {
 
                     alert('Switched Successfully');
                     document.getElementById('switchMsg').style.color = 'lime';
+				}
+			});
+		}
+        else {
+            // document.getElementById('switchMsg').style.color = 'red';
+            // $('#switchMsg').text("");
+            alert('All Fields Are Require!');
+        }
+	});
+
+    // Basic Plan 
+    $('#basicPlan').click(function(){
+		$user_id = $('#user_id1').val();
+		$basic_period_time = $('#basic_period_time').val();
+		$basic_send_to = $('#basic_send_to').val();
+		$basic_send_from = $('#basic_send_from').val();
+		$basic_plan = $('#basic_plan').val();
+        
+        document.getElementById('basicPlan').style.pointerEvents = 'none';
+        document.getElementById('basicPlan').style.opacity = '50%';
+
+		if ($user_id != "0" && $basic_period_time != "" && $basic_send_to != "" && $basic_send_from != "" && $basic_plan != "") {
+			var BasicPlanData = $('#BasicPlanData').serialize();
+			$.ajax({
+				type: 'POST',
+                url: 'functions/users.php',
+				data: BasicPlanData,
+				success:function(res){
+                    
+                    $('#BasicPlanData')[0].reset();
+
+                    document.getElementById('basicPlan').style.pointerEvents = 'visible';
+                    document.getElementById('basicPlan').style.opacity = '100%';
+
+                    alert('Thank you To buy a Subscription, Wait for one hour!!!');
+                    document.getElementById('basichMsg').style.color = 'lime';
+                    
+                    
+                    $('.basic_total').text('');
+                    $('.basic_info').text('');
+				}
+			});
+		}
+        else {
+            // document.getElementById('switchMsg').style.color = 'red';
+            // $('#switchMsg').text("");
+            alert('All Fields Are Require!');
+        }
+	});
+        
+    
+    // Pro Plan 
+    $('#proPlan').click(function(){
+		$user_id = $('#user_id').val();
+		$pro_period_time = $('#pro_period_time').val();
+		$pro_send_to = $('#pro_send_to').val();
+		$pro_send_from = $('#pro_send_from').val();
+		$pro_plan = $('#pro_plan').val();
+        
+        document.getElementById('proPlan').style.pointerEvents = 'none';
+        document.getElementById('proPlan').style.opacity = '50%';
+
+		if ($user_id != "0" && $pro_period_time != "" && $pro_send_to != "" && $pro_send_from != "" && $pro_plan != "") {
+			var ProPlanData = $('#ProPlanData').serialize();
+			$.ajax({
+				type: 'POST',
+                url: 'functions/users.php',
+				data: ProPlanData,
+				success:function(res){
+                    
+                    $('#ProPlanData')[0].reset();
+
+                    document.getElementById('proPlan').style.pointerEvents = 'visible';
+                    document.getElementById('proPlan').style.opacity = '100%';
+
+                    alert('Thank you To buy a Subscription, Wait for one hour!!!');
+                    document.getElementById('prohMsg').style.color = 'lime';
+                    
+                    $('.pro_total').text('');
+                    $('.pro_info').text('');
 				}
 			});
 		}
@@ -257,11 +403,12 @@ $(document).ready(function () {
     $('#sendmsg').click(function(){
 		$userid = $('#userid').val();
 		$chaterid = $('#chaterid').val();
-		$message = $('#message').val();
+		$message = $('.message').val();
+		$msg_from = $('#msg_from').val();
 		if ($chaterid != "" && $userid != "0") {
             if ($message != "") {
                 document.getElementById('sendmsg').style.pointerEvents = 'none';
-                document.getElementById('sendmsg').style.opacity = '80%';
+                document.getElementById('sendmsg').style.opacity = '50%';
                 $.ajax({
                     type: 'POST',
                     url: 'functions/users.php',
@@ -269,13 +416,17 @@ $(document).ready(function () {
                         userid:$userid,
                         chaterid: $chaterid,
                         message: $message,
+                        msg_from: $msg_from,
                         sendmsg: 1
                     },
                     success:function(){
-                        $chaterid = '';
+                        $('.message').val('');
                         chating();
                         document.getElementById('sendmsg').style.pointerEvents = 'visible';
                         document.getElementById('sendmsg').style.opacity = '100%';
+
+                        setTimeout(scrollDown, 1000)
+                        
                     }
                 });
             }

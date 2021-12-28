@@ -169,6 +169,24 @@ function localProducts(){
     });
 }
 
+// Trending Products
+function trendingProducts(){
+    $city = $('#city').val();
+    $country = $('#country').val();
+    $.ajax({
+        type: 'POST',
+        url: 'functions/products_categories.php',
+        data: {
+            city: $city,
+            country: $country,
+            trendingProducts: 1
+        },
+        success:function(data){
+            $('#trendingProducts').html(data);
+        }
+    });
+}
+
 
 
 // Analayzing Products info in dashboard
@@ -350,6 +368,7 @@ $(document).ready(function () {
 		$search = $('#search').val();
         $city = $('#city').val();
         $country = $('#country').val();
+        $userid = $('#userid').val();
 		if($search !=''){
             $.ajax({
                 type: 'POST',
@@ -358,6 +377,7 @@ $(document).ready(function () {
                     search: $search,
                     city: $city,
                     country: $country,
+                    userid: $userid,
                     SearchProduct: 1
                 },
                 success:function(data){

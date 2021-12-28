@@ -1,5 +1,6 @@
 CREATE TABLE users (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
+    social_id text,
     f_name varchar(225),
     l_name varchar(225),
     gender varchar(25),
@@ -7,25 +8,20 @@ CREATE TABLE users (
     city varchar(225) NOT NULL,
     phone int(50) NOT NULL,
     email varchar(225),
-    password varchar(225),
     image varchar(225),
     type varchar(225),
-    subscription_ends DATE DEFAULT NULL,
     login_type varchar(25),
-    last_date date NOT NULL,
-    last_time time NOT NULL,
-    verify int(1) NOT NULL,
-    token varchar(50) NOT NULL,
-	tokenExpire datetime DEFAULT NULL,
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now()
+    subscription_period DATE DEFAULT NULL,
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW()
 );
 CREATE TABLE clients (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
     client_id int(50),
     com_id int(50),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    UNIQUE `unique_client`(`client_id`, `com_id`),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (client_id)  references users (id) on delete cascade,
     FOREIGN KEY (com_id)  references users (id) on delete cascade
 );
@@ -37,29 +33,33 @@ CREATE TABLE com_info (
     is_delivery varchar(25),
     delivery_desc varchar(225),
     address varchar(225),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (com_id)  references users (id) on delete cascade
 );
--- CREATE TABLE subscription (
---     id int(50) PRIMARY KEY AUTO_INCREMENT,
---     com_id int(50),
---     from_phone int(50) NOT NULL,
---     to_phone int(50) NOT NULL,
---     create_at DATE DEFAULT now(),
---     update_at DATE DEFAULT now(),
---     FOREIGN KEY (com_id)  references users (id) on delete cascade
--- );
+CREATE TABLE subscription (
+    id int(50) PRIMARY KEY AUTO_INCREMENT,
+    com_id int(50),
+    send_from varchar(225) NOT NULL,
+    send_to varchar(225) NOT NULL,
+    plan varchar(225),
+    period varchar(225),
+    is_accepted varchar(25),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
+    UNIQUE `unique_subscription`(`com_id`, `create_at`),
+    FOREIGN KEY (com_id)  references users (id) on delete cascade
+);
 CREATE TABLE products (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
     com_id int(50),
-    p_name varchar(225),
-    p_desc varchar(225),
+    p_name text,
+    p_desc text,
     p_price double,
     p_img varchar(225),
     category varchar(225),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (com_id)  references users (id) on delete cascade
 );
 CREATE TABLE visitors (
@@ -67,8 +67,8 @@ CREATE TABLE visitors (
     client_id int(50),
     com_id int(50),
     p_id int(50),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATE DEFAULT NULL,
+    update_at DATE DEFAULT NULL,
     FOREIGN KEY (com_id)  references users (id) on delete cascade,
     FOREIGN KEY (client_id)  references users (id) on delete cascade,
     FOREIGN KEY (p_id)  references products (id) on delete cascade
@@ -79,8 +79,9 @@ CREATE TABLE carts (
     client_id int(50),
     quantity int(50),
     is_complete varchar(25),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATE DEFAULT NULL,
+    update_at DATE DEFAULT NULL,
+    UNIQUE `unique_index`(`p_id`, `client_id`),
     FOREIGN KEY (p_id)  references products (id) on delete cascade,
     FOREIGN KEY (client_id)  references users (id) on delete cascade
 );
@@ -88,41 +89,10 @@ CREATE TABLE products_likes (
     id int(50) PRIMARY KEY AUTO_INCREMENT,
     p_id int(50),
     user_id int(50),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     UNIQUE `unique_index`(`p_id`, `user_id`),
     FOREIGN KEY (p_id)  references products (id) on delete cascade,
-    FOREIGN KEY (user_id)  references users (id) on delete cascade
-);
-CREATE TABLE posts (
-    id int(50) PRIMARY KEY AUTO_INCREMENT,
-    user_id int(50),
-    p_id int(50),
-    title varchar(225),
-    body varchar(225),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
-    FOREIGN KEY (user_id)  references users (id) on delete cascade,
-    FOREIGN KEY (p_id)  references products (id) on delete cascade
-);
-CREATE TABLE posts_comments (
-    id int(50) PRIMARY KEY AUTO_INCREMENT,
-    post_id int(50),
-    user_id int(50),
-    comment varchar(225),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
-    FOREIGN KEY (post_id)  references posts (id) on delete cascade,
-    FOREIGN KEY (user_id)  references users (id) on delete cascade
-);
-CREATE TABLE posts_likes (
-    id int(50) PRIMARY KEY AUTO_INCREMENT,
-    post_id int(50),
-    user_id int(50),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
-    UNIQUE `unique_index`(`post_id`, `user_id`),
-    FOREIGN KEY (post_id)  references posts (id) on delete cascade,
     FOREIGN KEY (user_id)  references users (id) on delete cascade
 );
 CREATE TABLE messages (
@@ -130,8 +100,9 @@ CREATE TABLE messages (
     sender int(50),
     reciever int(50),
     message text,
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    msg_from text,
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (sender)  references users (id) on delete cascade,
     FOREIGN KEY (reciever)  references users (id) on delete cascade
 );
@@ -141,7 +112,7 @@ CREATE TABLE notifications (
     noti_id int(50),
     noti_type varchar(25),
     view varchar(25),
-    create_at DATE DEFAULT now(),
-    update_at DATE DEFAULT now(),
+    create_at DATETIME DEFAULT NOW(),
+    update_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (my_id)  references users (id) on delete cascade
 );

@@ -142,7 +142,7 @@
 							<?php
 						} else {
 							?>
-								<a href="products-details.php?productid=<?php echo $categorysProduct['id']; ?>&com_id=<?php echo $categorysProduct['com_id']; ?>&com_img=<?php echo $categorysProduct['image']; ?>&com-f-name=<?php echo $categorysProduct['f_name']; ?>&com-l-name=<?php echo $categorysProduct['l_name']; ?>&product-name=<?php echo $categorysProduct['p_name']; ?>&product-price=<?php echo $categorysProduct['p_price']; ?>&product-desc=<?php echo $categorysProduct['p_desc']; ?>&product-img=<?php echo $categorysProduct['p_img']; ?>&category=<?php echo $categorysProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+								<a href="products-details.php?productid=<?php echo $categorysProduct['id']; ?>&com_id=<?php echo $categorysProduct['com_id']; ?>&com_img=<?php echo $categorysProduct['image']; ?>&com-f-name=<?php echo $categorysProduct['f_name']; ?>&com-l-name=<?php echo $categorysProduct['l_name']; ?>&product-name=<?php echo $categorysProduct['p_name']; ?>&product-price=<?php echo $categorysProduct['p_price']; ?>&product-desc=<?php echo $categorysProduct['p_desc']; ?>&product-img=<?php echo $categorysProduct['p_img']; ?>&category=<?php echo $categorysProduct['category']; ?>" class="btn btn-primary radius custom-color w-100 text-center">Order Now</a>
 							<?php
 						}
 					?>
@@ -190,11 +190,12 @@
 		$search = $_POST['search'];
 		$city = $_POST['city'];
 		$country = $_POST['country'];
-		$SearchProducts = $Products_Categories_obj->search_products($search,$city,$country); 
+		$userid = $_POST['userid'];
+		$SearchProducts = $Products_Categories_obj->search_products($search,$city,$country,$userid); 
 		if ($SearchProducts) {
 			foreach ($SearchProducts as $SearchProduct) {
 				$product_id = $SearchProduct['id'];
-				if ($SearchProduct['city'] == $city && $SearchProduct['country'] == $country || $SearchProduct['city'] != $city && $SearchProduct['country'] == $country) {
+				// if ($SearchProduct['city'] == $city && $SearchProduct['country'] == $country || $SearchProduct['city'] != $city && $SearchProduct['country'] == $country) {
 				?>
 					<div class="col-md-3 col-sm-12 px-1">
 						<div class="border radius light-bg  text-dark p-4 product">
@@ -206,13 +207,13 @@
 										<?php
 									} else {
 										?>
-										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $SearchProduct['image']; ?>')"></div>
+										<div class="img img-fluid" style="background-image: url('<?php echo $SearchProduct['image']; ?>')"></div>
 										<?php
 									}
 									?>
 								<div class="px-2 ">
 									<h6><?php echo $SearchProduct['f_name'].' '.$SearchProduct['l_name']; ?></h6>
-									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> <?php echo $SearchProduct['city']; ?></p>
 								</div>
 							</div>
 							<div class="product-img" style="background-image: url('./img/products/<?php echo $SearchProduct['p_img']; ?>')"></div>
@@ -238,12 +239,12 @@
 								</span>
 							</div>
 
-							<a href="products-details.php?productid=<?php echo $SearchProduct['id']; ?>&com_id=<?php echo $SearchProduct['com_id']; ?>&com_img=<?php echo $SearchProduct['image']; ?>&com-f-name=<?php echo $SearchProduct['f_name']; ?>&com-l-name=<?php echo $SearchProduct['l_name']; ?>&product-name=<?php echo $SearchProduct['p_name']; ?>&product-price=<?php echo $SearchProduct['p_price']; ?>&product-desc=<?php echo $SearchProduct['p_desc']; ?>&product-img=<?php echo $SearchProduct['p_img']; ?>&category=<?php echo $SearchProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+							<a href="products-details.php?productid=<?php echo $SearchProduct['id']; ?>&com_id=<?php echo $SearchProduct['com_id']; ?>&com_img=<?php echo $SearchProduct['image']; ?>&com-f-name=<?php echo $SearchProduct['f_name']; ?>&com-l-name=<?php echo $SearchProduct['l_name']; ?>&product-name=<?php echo $SearchProduct['p_name']; ?>&product-price=<?php echo $SearchProduct['p_price']; ?>&product-desc=<?php echo $SearchProduct['p_desc']; ?>&product-img=<?php echo $SearchProduct['p_img']; ?>&category=<?php echo $SearchProduct['category']; ?>" class="btn btn-primary radius custom-color w-100 text-center">Order Now</a>
 
 						</div>
 					</div>
 				<?php
-				}
+				// }
 			}
 		}
 
@@ -257,7 +258,7 @@
 		if (!$allLocalProducts) {
 			?>
 			<i class="fa fa-gifts" style="font-size:100px;"></i>
-			<h3> There is no Products in Your Local Area !!!</h3>
+			<h5> There is no Products in Your Local Area !!!</h5>
 			<?php
 		} else{
 			foreach ($allLocalProducts as $theLocalProduct) {
@@ -274,13 +275,78 @@
 										<?php
 									} else {
 										?>
-										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $theLocalProduct['image']; ?>')"></div>
+										<div class="img img-fluid" style="background-image: url('<?php echo $theLocalProduct['image']; ?>')"></div>
 										<?php
 									}
 								?>
 								<div class="px-2 ">
 									<h6><?php echo $theLocalProduct['f_name'].' '. $theLocalProduct['l_name']; ?></h6>
-									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> <?php echo $theLocalProduct['city']; ?></p>
+								</div>
+							</div>
+							<div class="product-img" style="background-image: url('./img/products/<?php echo $theLocalProduct['p_img']; ?>')"></div>
+							<h6 class="mt-2"><?php echo $theLocalProduct['p_name']; ?></h6>
+							<h6 style="font-size:12px;"><?php echo $theLocalProduct['p_price']; ?>$</h6>
+
+							<div class="w-100 d-flex text-center my-2 overflow-hidden" style="font-size: 12px;">
+								<span class="w-100 border me-1 p-1" style="border-radius:10px;">
+									<i class="fa fa-eye"></i> 
+									<?php 
+										$productLikes = $Products_Categories_obj->ProductVisitorsCounter($product_id);  
+										echo $productLikes; 
+									?>
+								</span>
+								<span class="w-100 border ms-1 p-1 fw-bold" style="border-radius:10px;">
+									<i class="fa fa-heart"></i>
+									<?php 
+										$productLikes = $Products_Categories_obj->ProductLikesCounter($product_id);  
+										echo $productLikes; 
+									?>
+								</span>
+							</div>
+
+							<a href="products-details.php?productid=<?php echo $theLocalProduct['id']; ?>&com_id=<?php echo $theLocalProduct['com_id']; ?>&com_img=<?php echo $theLocalProduct['image']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>&category=<?php echo $theLocalProduct['category']; ?>" class="radius btn btn-primary custom-color w-100 text-center">Order Now</a>
+
+
+						</div>
+					</div>
+				<?php
+			}
+		}
+	}
+
+	// Trending Products
+	if(isset($_POST['trendingProducts'])){
+		$city = $_POST['city'];
+		$country = $_POST['country'];
+		$allLocalProducts = $Products_Categories_obj->trendingProducts($city,$country); 
+		if (!$allLocalProducts) {
+			?>
+			<i class="fa fa-gifts" style="font-size:100px;"></i>
+			<h5> There is no Products in Your Local Area !!!</h5>
+			<?php
+		} else{
+			foreach ($allLocalProducts as $theLocalProduct) {
+				$product_id = $theLocalProduct['id'];
+				
+				?>
+					<div class="col-md-3 col-sm-12 px-1">
+						<div class="border radius light-bg  text-dark p-4 product">
+							<div class="d-flex text-start">
+								<?php
+									if ($theLocalProduct['image'] == "") {
+										?>
+											<i class="fa fa-building mt-2 ms-2 me-2" style="font-size: 30px;"></i>
+										<?php
+									} else {
+										?>
+										<div class="img img-fluid" style="background-image: url('<?php echo $theLocalProduct['image']; ?>')"></div>
+										<?php
+									}
+								?>
+								<div class="px-2 ">
+									<h6><?php echo $theLocalProduct['f_name'].' '. $theLocalProduct['l_name']; ?></h6>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> <?php echo $theLocalProduct['city']; ?></p>
 								</div>
 							</div>
 							<div class="product-img" style="background-image: url('./img/products/<?php echo $theLocalProduct['p_img']; ?>')"></div>
@@ -339,13 +405,13 @@
 										<?php
 									} else {
 										?>
-										<div class="img img-fluid" style="background-image: url('./img/profiles/<?php echo $theLocalProduct['image']; ?>')"></div>
+										<div class="img img-fluid" style="background-image: url('<?php echo $theLocalProduct['image']; ?>')"></div>
 										<?php
 									}
 								?>
 								<div class="px-2 ">
 									<h6><?php echo $theLocalProduct['f_name'].' '. $theLocalProduct['l_name']; ?></h6>
-									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> 2km Away</p>
+									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> <?php echo $theLocalProduct['city']; ?></p>
 								</div>
 							</div>
 							<div class="product-img" style="background-image: url('./img/products/<?php echo $theLocalProduct['p_img']; ?>')"></div>
@@ -369,7 +435,7 @@
 								</span>
 							</div>
 
-							<a href="products-details.php?productid=<?php echo $theLocalProduct['id']; ?>&com_id=<?php echo $theLocalProduct['com_id']; ?>&com_img=<?php echo $theLocalProduct['image']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>&category=<?php echo $theLocalProduct['category']; ?>" class="btn btn-primary custom-color w-100 text-center">Order Now</a>
+							<a href="products-details.php?productid=<?php echo $theLocalProduct['id']; ?>&com_id=<?php echo $theLocalProduct['com_id']; ?>&com_img=<?php echo $theLocalProduct['image']; ?>&com-f-name=<?php echo $theLocalProduct['f_name']; ?>&com-l-name=<?php echo $theLocalProduct['l_name']; ?>&product-name=<?php echo $theLocalProduct['p_name']; ?>&product-price=<?php echo $theLocalProduct['p_price']; ?>&product-desc=<?php echo $theLocalProduct['p_desc']; ?>&product-img=<?php echo $theLocalProduct['p_img']; ?>&category=<?php echo $theLocalProduct['category']; ?>" class="btn btn-primary radius custom-color w-100 text-center">Order Now</a>
 						</div>
 					</div>
 				<?php
@@ -447,11 +513,10 @@
 
 		$categoriesInfo = $Products_Categories_obj->categoryCounter($userid); 
 		$productsInfo = $Products_Categories_obj->productCounter($userid); 
-		$postsInfo = $Products_Categories_obj->postsCounter($userid); 
 
 		?>
 		
-			<h5 class='text-center fw-bold'>You have Uploaded</h5>
+			<h5 class='text-center fw-bold'>All Products You Uploaded</h5>
 
 			<div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
 				<div class="col-md-6 col-sm-6">
@@ -611,7 +676,7 @@
 			});
 		</script>
 		
-        	<h5 class='text-center fw-bold'>Profile: Visitors</h5>
+        	<h5 class='text-center fw-bold'>Profile/ Product Visitors</h5>
 
             <div class="col-md-12 col-sm-12 d-flex flex-column flex-md-row my-5">
                 <div class="form-group p-2 w-100 d-md-flex">

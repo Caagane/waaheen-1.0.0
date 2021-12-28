@@ -15,7 +15,7 @@
         <div class="row mt-2">
             <div class="col-md-12 col-sm-12 p-4 py-5 m-auto light-bg1 border radius shadow-md-sm text-dark">
                 <form id="SearchProduct" class="form-group d-flex border radius overflow-hidden">
-                    <input name="search" id="search" class="light-bg1 custom-shadow border form-control shadow-none p-4" style="width: 100%; background: transparent; border: 0px;" type="text" placeholder="Search..." />
+                    <input name="search" id="search" class="bg-white custom-shadow form-control shadow-none p-4" style="width: 100%; background: transparent; border: 0px;" type="text" placeholder="Search..." />
                     <!-- <i class="fa fa-map-marker-alt" style="font-size: 1.5rem; padding: 20px; color: #666666; border-left: 1px solid #c6c6c6"></i> -->
                     <!-- <input name="dist" id="dist" class="form-control shadow-none p-4" style="display:none;width: 30%; background: transparent; border: 0px solid #fff; margin-left: -30px" type="number" placeholder="Km" /> -->
                     <button type="button" name="searchBtn" id="searchBtn" class="btn btn-primary custom-color"><i class="fa fa-search" style="font-size: 1.5rem; padding: 20px; border: none"></i></button>

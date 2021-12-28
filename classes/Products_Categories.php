@@ -48,6 +48,11 @@ class Products_Categories extends DbConnection{
     public function deleteProduct($product_id)
     {
         $product_id = $this->con->real_escape_string($product_id);
+
+        // Delete Notification
+        $query1 = "DELETE FROM notifications WHERE noti_id='$noti_id'";
+        $sql1 = $this->con->query($query1);
+
         $query = "DELETE FROM products WHERE id='$product_id'";
         $sql = $this->con->query($query);
     }
@@ -145,6 +150,37 @@ class Products_Categories extends DbConnection{
         }
     }
 
+    // Trending Products
+    public function trendingProducts($city,$country)
+    {
+        $city = $this->con->real_escape_string($city);
+        $country = $this->con->real_escape_string($country);
+
+        $query = "SELECT products.id, 
+        products.com_id, 
+        products.p_name, 
+        products.p_desc, 
+        products.p_price, 
+        products.p_img, 
+        products.category, 
+        users.f_name, 
+        users.l_name, 
+        users.image,
+        users.city,
+        users.country
+        FROM products, users WHERE products.com_id=users.id AND (city='$city' or country='$country') ORDER BY `products`.`id` DESC limit 50";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
     // related products in product details page
     public function relatedProducts($com_id,$productCategory,$product_id)
     {
@@ -160,6 +196,7 @@ class Products_Categories extends DbConnection{
         products.category, 
         users.f_name, 
         users.l_name, 
+        users.city, 
         users.image 
         FROM products, users WHERE products.id!='$product_id' and category='$productCategory' and com_id='$com_id' and products.com_id=users.id ORDER BY `products`.`id` DESC limit 4";
         $result = $this->con->query($query);
@@ -175,13 +212,14 @@ class Products_Categories extends DbConnection{
     }
 
     // Search Products 
-    public function search_products($search,$city,$country)
+    public function search_products($search,$city,$country,$userid)
     {
         $search = $this->con->real_escape_string($search);
         $councitytry = $this->con->real_escape_string($city);
         $country = $this->con->real_escape_string($country);
+        $userid = $this->con->real_escape_string($userid);
         
-        $query = "SELECT * FROM `users` left join products on products.com_id=users.id WHERE p_name LIKE '%$search%' OR p_desc LIKE '%$search%' OR category LIKE '%$search%' ORDER BY `products`.`id` desc LIMIT 16";
+        $query = "SELECT * FROM `users` left join products on products.com_id=users.id WHERE users.id!='$userid' AND (p_name LIKE '%$search%' OR p_desc LIKE '%$search%' OR category LIKE '%$search%') ORDER BY `products`.`id` desc LIMIT 16";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -280,6 +318,18 @@ class Products_Categories extends DbConnection{
     {
         $userid = $this->con->real_escape_string($userid);
         $product_id = $this->con->real_escape_string($product_id);
+        
+        // get client notification id 
+        $query0 = "SELECT * FROM `products_likes` where p_id='$product_id' AND `user_id`='$userid'";
+        $result = $this->con->query($query0);
+        // if user becomes unclient then delte the notification 
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_array();
+            $noti_id = $row['id'];
+            $query1 = "DELETE FROM notifications WHERE noti_id='$noti_id'";
+            $sql1 = $this->con->query($query1);
+        }
+        // UnLike
         $query = "DELETE FROM products_likes WHERE p_id='$product_id' AND `user_id`='$userid'";
         $sql = $this->con->query($query);
 
@@ -298,14 +348,6 @@ class Products_Categories extends DbConnection{
     {
         $userid = $this->con->real_escape_string($userid);
         $query = "SELECT * FROM products  where com_id = '$userid' ORDER BY `products`.`category` ASC";
-        $result = $this->con->query($query);
-        return $result->num_rows;
-    }
-    // Posts Counter in dashboard
-    public function postsCounter($userid)
-    {
-        $userid = $this->con->real_escape_string($userid);
-        $query = "SELECT * FROM posts  where `user_id` = '$userid' ORDER BY `posts`.`user_id` ASC";
         $result = $this->con->query($query);
         return $result->num_rows;
     }

@@ -56,6 +56,11 @@ class Signin_Signup extends DbConnection{
         return $row;       
     }
     
+    // fjsdklfjdlskfjds;lkfjsd;lkfjsd;lfj;sdlkfjsdl;k
+    // fjsdklfjdlskfjds;lkfjsd;lkfjsd;lfj;sdlkfjsdl;k
+    // fjsdklfjdlskfjds;lkfjsd;lkfjsd;lfj;sdlkfjsdl;k
+    // fjsdklfjdlskfjds;lkfjsd;lkfjsd;lfj;sdlkfjsdl;k
+    // fjsdklfjdlskfjds;lkfjsd;lkfjsd;lfj;sdlkfjsdl;k
     public function escape_string($value){
         
         return $this->connection->real_escape_string($value);

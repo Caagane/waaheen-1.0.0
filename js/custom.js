@@ -6,6 +6,18 @@ $('#hideLoginModel').click(function(){
     document.getElementById('loginModel').style.display='none';
 });
 
+// Message Model in profile / product
+$('#showMessageModel').click(function(){
+    document.getElementById('messageModel').style.display='block';
+});
+$('#hideMessageModel').click(function(){
+    document.getElementById('messageModel').style.display='none';
+});
+
+
+$('#hideMsgModel').click(function(){
+    document.querySelector('.message_bg').style.display = 'none';
+});
 
 
 $('.userBtn').click(function(){
@@ -25,8 +37,11 @@ $('.userBtn1').click(function(){
 $('.userBtn2').click(function(){
     if (document.querySelector('.profileLinks').style.display = 'block'){
         document.querySelector('.profileLinks').style.display = 'none';
-        document.querySelector('.userBtn').style.display = 'block';
-        document.querySelector('.userBtn1').style.display = 'none';
+
+        if (document.querySelector('.userBtn')) {
+            document.querySelector('.userBtn').style.display = 'block';
+            document.querySelector('.userBtn1').style.display = 'none';
+        }
     }
 });
 
@@ -59,4 +74,25 @@ $('#openSwitch').click(function(){
 $('#closeSwitch').click(function(){
     $('#switchModel').modal('hide');
 });
+
+// open Basic Subscription Model
+$('#openBasicSubModel').click(function(){
+    $('#basicSubModel').modal('show');
+});
+
+// close Basic Subscription Model
+$('#closeBasicSubModel').click(function(){
+    $('#basicSubModel').modal('hide');
+});
+
+// open Pro Subscription Model
+$('#openProSubModel').click(function(){
+    $('#proSubModel').modal('show');
+});
+
+// close Pro Subscription Model
+$('#closeProSubModel').click(function(){
+    $('#proSubModel').modal('hide');
+});
+
 

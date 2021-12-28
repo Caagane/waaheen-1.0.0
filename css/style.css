@@ -2,7 +2,13 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    
+    /* animation-name: allElements;
+    animation-duration: 1s;  
+    animation-delay: 0s;
+    animation-fill-mode: backwards; */
 }
+
 
 body {
     color: #444;
@@ -43,7 +49,7 @@ body {
 }
 
 .light-bg{
-    background: #f2f2f23a;
+    background: #f2f2f260;
     backdrop-filter: blur(5px);
     box-shadow: 0.5px 1px 10px 1px #ffffff4d;
 }
@@ -173,6 +179,14 @@ a {
     right: 19%;
     overflow: hidden;
 }
+#hideMsgModel {
+    display: none;
+}
+#messageModel .message-bg {
+    width: 33.3%;
+    right: 33.3%;
+    border-radius: 10px;
+}
 .message-bg .header {
     padding: 5px;
     height: 10%;
@@ -207,6 +221,10 @@ a {
     border-radius: 20px;
     border-top-left-radius: 0px;
 }
+#messageModel .message-bg .received, #messageModel .message-bg .sended{
+    min-width:50%;
+    max-width: 80%;
+}
 
 
 /* Profile Paner background color  */
@@ -223,7 +241,7 @@ a {
     border-bottom-left-radius: 50%;
     border-bottom-right-radius: 5%;
     border: 5px solid #c9b5ff;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     float: right;
@@ -252,7 +270,7 @@ a {
 }
 .product-img {
     width: 100%;
-    height: 100px;
+    height: 150px;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -300,7 +318,7 @@ a {
     height: 150px;
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     border: 0px solid #5900ff;
     border-radius: 100%;
 }
@@ -365,16 +383,12 @@ a {
 
 @media (max-width: 1000px) {  
 
-    .container {
-        padding: 0;
-        margin: 0;
-    }  
     nav .container {
         padding: 10px 20px;
     }
     .light-bg{
         margin: 0;
-        background: #e2e2e22d;
+        background: #f2f2f260;
         backdrop-filter: blur(10px);
     }
     .row {
@@ -412,10 +426,13 @@ a {
     .name {
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: center;
+        align-items: center;
         padding: 0px 20px;
         margin-top: 10px;
         font-size: 14px;
+        border: none; 
+        text-align: center;
     }
     .name h1 {
         color: #c9b5ff;
@@ -426,19 +443,19 @@ a {
     }
     .user-profile-img {
         width: 50%;
-        height: 200px;
+        height: 150px;
         border-radius: 50%;
         margin: auto;
         float: none;
     }
     .near-com-wrapper {
         width: 100%;
-        margin: 0;
-        padding: 20px 15px;
+        margin: 0px 5px;
+        padding: 20px;
         display: flex;
-        justify-content: space-between;
-        justify-items: center;
-        overflow-x: auto;
+        justify-content: flex-end;
+        justify-items: flex-end;
+        overflow-x: scroll;
     }
     .near-com-wrapper .btn{
         font-size: 0.5rem;
@@ -482,15 +499,28 @@ a {
         z-index: 9999999;
         border-radius: 0px;
     }
-    
+    .message_bg{
+        display: none;
+    }
+    #hideMsgModel {
+        display: block;
+    }
+    #messageModel .message-bg {
+        width: 100%;
+        right: 0%;
+        border-radius: 0px;
+    }
     .profile-drop-down {
         position: fixed;
-        top: 50%;
+        top: 55%;
         right: 33.3%;
         width: 33.3%;
         text-align: center;
         overflow: hidden;
         z-index: 10;
+    }
+    .near-com {
+        width: 45%;
     }
 
 }
@@ -506,28 +536,48 @@ a {
 /* ============ ALL CURVY SHAPES ============= */
 
     
-/* Login Curvy Shape */
-.custom-shape-divider-bottom-1637393832 {
-    position: absolute;
-    bottom: 0;
+/* Products page shape style */
+.custom-shape-divider-top-1640258196 {
+    top: 0;
     left: 0;
     width: 100%;
     overflow: hidden;
     line-height: 0;
-    transform: rotate(180deg);
 }
 
-.custom-shape-divider-bottom-1637393832 svg {
+.custom-shape-divider-top-1640258196 svg {
     position: relative;
     display: block;
-    width: calc(100% + 1.3px);
-    height: 100px;
+    width: calc(195% + 1.3px);
+    height: 252px;
+    transform: rotateY(180deg);
 }
 
-.custom-shape-divider-bottom-1637393832 .shape-fill {
-    fill: #5900ff;
+.custom-shape-divider-top-1640258196 .shape-fill {
+    fill: #5900FF;
 }
 
+
+
+/* Companies page shape style */
+.custom-shape-divider-top-1640258091 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1640258091 svg {
+    position: relative;
+    display: block;
+    width: calc(195% + 1.3px);
+    height: 252px;
+}
+
+.custom-shape-divider-top-1640258091 .shape-fill {
+    fill: #5900FF;
+}
 
 
 /* home curvy shape */

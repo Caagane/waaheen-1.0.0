@@ -9,11 +9,12 @@ class Users extends DbConnection{
     }
 
     // Companies in Local Area
-    public function localCompanies($city,$country)
+    public function localCompanies($city,$country,$userid)
     {
         $city = $this->con->real_escape_string($city);
         $country = $this->con->real_escape_string($country);
-        $query = "SELECT * FROM `users` WHERE type='company' AND city='$city' or country='$country' ORDER BY `users`.`id` desc limit 6";
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM `users` WHERE type='company' AND city='$city' AND id!='$userid' ORDER BY `users`.`id` desc limit 6";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -22,11 +23,28 @@ class Users extends DbConnection{
             }
             return $data;
         }else if($result->num_rows == 0){
-            echo "No Result Founded!";
             return false;
         }
     }
-
+    
+    // Trending Companies
+    public function trendingCompanies($city,$country,$userid)
+    {
+        $city = $this->con->real_escape_string($city);
+        $country = $this->con->real_escape_string($country);
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM `users` WHERE id!='$userid' AND type='company' AND (city='$city' or country='$country') ORDER BY `users`.`id` desc limit 50";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
 
     // Switching to Business Account
     public function SwitchReq($user_id,$role,$role_desc,$delivery,$delivery_desc,$address)
@@ -37,7 +55,44 @@ class Users extends DbConnection{
         $delivery = $this->con->real_escape_string($delivery);
         $delivery_desc = $this->con->real_escape_string($delivery_desc);
         $address = $this->con->real_escape_string($address);
+        
+        $start_date=date('Y-m-d'); 
+        $date = strtotime($start_date);
+        $date = strtotime("+7 day", $date);
+        $period = date('Y/m/d', $date);
+        $query = "UPDATE `users` SET subscription_period='$period' where id='$user_id'";
+        $result = $this->con->query($query);
+
         $query = "INSERT INTO `com_info` (com_id, role, role_desc, is_delivery, delivery_desc, address) VALUES ('$user_id','$role','$role_desc','$delivery','$delivery_desc','$address')";
+        $sql = $this->con->query($query);
+        $query1 = "UPDATE users SET type='company' WHERE id='$user_id'";
+        $sql1 = $this->con->query($query1);
+    }
+
+    // Basic Plan Subscription
+    public function basicPlan($user_id, $basic_period_time, $basic_send_to, $basic_send_from, $basic_plan)
+    {
+        $user_id = $this->con->real_escape_string($user_id);
+        $basic_period_time = $this->con->real_escape_string($basic_period_time);
+        $basic_send_to = $this->con->real_escape_string($basic_send_to);
+        $basic_send_from = $this->con->real_escape_string($basic_send_from);
+        $basic_plan = $this->con->real_escape_string($basic_plan);
+
+        $query = "INSERT INTO `subscription` (com_id, plan, period, send_from, send_to, is_accepted) VALUES ('$user_id','$basic_plan','$basic_period_time','$basic_send_from','$basic_send_to','no')";
+        $sql = $this->con->query($query);
+        $query1 = "UPDATE users SET type='company' WHERE id='$user_id'";
+        $sql1 = $this->con->query($query1);
+    }
+    // Pro Plan Subscription
+    public function proPlan($user_id, $pro_period_time, $pro_send_to, $pro_send_from, $pro_plan)
+    {
+        $user_id = $this->con->real_escape_string($user_id);
+        $pro_period_time = $this->con->real_escape_string($pro_period_time);
+        $pro_send_to = $this->con->real_escape_string($pro_send_to);
+        $pro_send_from = $this->con->real_escape_string($pro_send_from);
+        $pro_plan = $this->con->real_escape_string($pro_plan);
+
+        $query = "INSERT INTO `subscription` (com_id, plan, period, send_from, send_to, is_accepted) VALUES ('$user_id','$pro_plan','$pro_period_time','$pro_send_from','$pro_send_to','no')";
         $sql = $this->con->query($query);
         $query1 = "UPDATE users SET type='company' WHERE id='$user_id'";
         $sql1 = $this->con->query($query1);
@@ -60,7 +115,6 @@ class Users extends DbConnection{
             }
             return $data;
         }else if($result->num_rows == 0){
-            echo "No Result Founded!";
             return false;
         }
     }
@@ -77,7 +131,6 @@ class Users extends DbConnection{
             }
             return $data;
         }else if($result->num_rows == 0){
-            echo "No Result Founded!";
             return false;
         }
     }
@@ -137,37 +190,6 @@ class Users extends DbConnection{
         }
     }
 
-
-    // notifications
-    public function fetchNotifications($userid)
-    {
-        $userid = $this->con->real_escape_string($userid);
-        $query = "SELECT products.id, 
-        products.com_id, 
-        products.p_name, 
-        products.p_desc, 
-        products.p_price, 
-        products.p_img, 
-        products.category, 
-        users.f_name, 
-        users.l_name, 
-        users.image, 
-        carts.p_id, 
-        carts.client_id
-        FROM carts, products, users WHERE products.com_id='$userid' AND products.id=carts.p_id AND carts.client_id=users.id ORDER BY `products`.`id` DESC limit 10";
-        $result = $this->con->query($query);
-        if ($result->num_rows >= 1) {
-            $data = array();
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-            return $data;
-        }else if($result->num_rows == 0){
-            return false;
-        }
-    }
-
-
     // display if follow product or not
     public function displayClientResult($userid,$profile_id)
     {
@@ -195,6 +217,19 @@ class Users extends DbConnection{
     {
         $userid = $this->con->real_escape_string($userid);
         $profile_id = $this->con->real_escape_string($profile_id);
+        
+        // get client notification id 
+        $query0 = "SELECT * FROM `clients` where com_id='$profile_id' and client_id='$userid'";
+        $result = $this->con->query($query0);
+        // if user becomes unclient then delte the notification 
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_array();
+            $noti_id = $row['id'];
+            $query1 = "DELETE FROM notifications WHERE noti_id='$noti_id'";
+            $sql1 = $this->con->query($query1);
+        }
+
+        // unClient
         $query = "DELETE FROM clients WHERE com_id='$profile_id' AND client_id='$userid'";
         $sql = $this->con->query($query);
     }
@@ -225,7 +260,7 @@ class Users extends DbConnection{
     {
         $userid = $this->con->real_escape_string($userid);
         $chaterid = $this->con->real_escape_string($chaterid);
-        $query = "SELECT * FROM `messages` WHERE sender='$userid' AND reciever='$chaterid' OR sender='$chaterid' AND reciever='$userid' order by id desc";
+        $query = "SELECT * FROM `messages` WHERE sender='$userid' AND reciever='$chaterid' OR sender='$chaterid' AND reciever='$userid' order by id asc";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -237,14 +272,26 @@ class Users extends DbConnection{
             return false;
         }
     }
+    // MSG From
+    public function msg_from($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM `users` WHERE id='$userid'";
+        $result = $this->con->query($query);
+        if($result->num_rows > 0){
+            $row = $result->fetch_array();
+            return $row['type'];
+        }
+    }
 
     // sending mesage
-    public function sendmsg($userid,$chaterid,$message)
+    public function sendmsg($userid,$chaterid,$message,$msg_from)
     {
         $userid = $this->con->real_escape_string($userid);
         $chaterid = $this->con->real_escape_string($chaterid);
         $message = $this->con->real_escape_string($message);
-        $query = "INSERT INTO `messages` (sender, reciever, `message`) VALUES ('$userid','$chaterid','$message')";
+        $msg_from = $this->con->real_escape_string($msg_from);
+        $query = "INSERT INTO `messages` (sender, reciever, `message`,msg_from) VALUES ('$userid','$chaterid','$message','$msg_from')";
         $sql = $this->con->query($query);
     }
 
@@ -319,7 +366,7 @@ class Users extends DbConnection{
     {
         $userid = $this->con->real_escape_string($userid);
         $p_id = $this->con->real_escape_string($p_id);
-        $query = "SELECT * FROM `products_likes` WHERE products_likes.p_id='$p_id'";
+        $query = "SELECT * FROM `products_likes` WHERE products_likes.p_id='$p_id' and `user_id`!='$userid'";
         $result = $this->con->query($query);
         
         if ($result->num_rows >= 1) {
@@ -366,5 +413,86 @@ class Users extends DbConnection{
             return false;
         }
     }
+
+    // change notifications state Read = 0 to read = 1
+    public function viewNotifications($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $userid = $this->con->real_escape_string($userid);
+        $query = "UPDATE `notifications` SET view = 'yes' WHERE my_id='$userid' AND view='no'";
+        $result = $this->con->query($query);
+        
+        if ($result->num_rows >= 1) {
+            return $result->num_rows;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
+    
+    // notifications
+    public function fetchNotifications($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM notifications WHERE my_id='$userid' ORDER BY `create_at` DESC LIMIT 225";
+        $result = $this->con->query($query);
+        if ($result->num_rows >= 1) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows == 0){
+            return false;
+        }
+    }
+
+    public function productNoti($noti_id)
+    {
+        $noti_id = $this->con->real_escape_string($noti_id);
+        $query = "SELECT * FROM products,users WHERE products.id='$noti_id' and products.com_id=users.id";
+        $result = $this->con->query($query);
+        if($result->num_rows > 0){
+            $row = $result->fetch_array();
+            return $row;
+        }
+        else{
+            return false;
+        }
+    }
+    public function likeNoti($noti_id)
+    {
+        $noti_id = $this->con->real_escape_string($noti_id);
+        $query = "SELECT 
+        products_likes.id,
+        products_likes.user_id,
+        users.f_name,
+        users.id,
+        users.l_name,
+        products.p_name
+        FROM products_likes,products,users WHERE products_likes.id='$noti_id' and products_likes.user_id=users.id and products_likes.p_id=products.id";
+        $result = $this->con->query($query);
+        if($result->num_rows > 0){
+            $row = $result->fetch_array();
+            return $row;
+        }
+        else{
+            return false;
+        }
+    }
+    public function clientNoti($noti_id)
+    {
+        $noti_id = $this->con->real_escape_string($noti_id);
+        $query = "SELECT * FROM clients,users WHERE clients.id='$noti_id' and clients.client_id=users.id";
+        $result = $this->con->query($query);
+        if($result->num_rows > 0){
+            $row = $result->fetch_array();
+            return $row;
+        }
+        else{
+            return false;
+        }
+    }
+
 
 }
