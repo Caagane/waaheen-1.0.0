@@ -60,7 +60,7 @@ function comProfile(){
 // user's carts
 function carts(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -79,7 +79,7 @@ function carts(){
 
 function chaters(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -97,7 +97,7 @@ function chaters(){
 function chating(){
     $userid = $('#userid').val();
     $chaterid = $('#chaterid').val();
-    if ($userid != "" && $chaterid != "") {
+    if ($userid != "0" && $chaterid != "") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -146,7 +146,7 @@ function clientResult(){
 // Preparing notifications!!!
 function notifications(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -171,7 +171,7 @@ function notifications(){
 // View all Notifications
 function viewNotifications(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -192,7 +192,7 @@ function viewNotifications(){
 // fetch notifications
 function fetchNotifications(){
     $userid = $('#userid').val();
-    if ($userid != "") {
+    if ($userid != "0") {
         $.ajax({
             type: 'POST',
             url: 'functions/users.php',
@@ -232,11 +232,35 @@ function google(){
     });
 }
 
+
+// insert user location into the DB
+function userLocation(){
+    $userid = $('#userid').val();
+    $country = $('#country').val();
+    $city = $('#city').val();
+    if ($userid != "0") {
+        $.ajax({
+            type: 'POST',
+            url: 'functions/users.php',
+            data: {
+                userid: $userid,
+                country: $country,
+                city: $city,
+                userLocation: 1
+            },
+            success:function(){
+            }
+        });
+    }
+}
+
+
+
+
+
+
 $(document).ready(function () {
 
-
-    facebook();
-    google();
 
     
     $('#switch').click(function(){

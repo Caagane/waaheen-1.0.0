@@ -24,7 +24,13 @@
   $(document).ready(function () {
       
     // Load all notifications
-    notifications();
+    userLocation();
+
+    setTimeout(google, 3000);
+    setTimeout(facebook, 3000);
+    setTimeout(notifications, 5000);
+
+
 
   });
 </script>

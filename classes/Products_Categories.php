@@ -137,7 +137,7 @@ class Products_Categories extends DbConnection{
         users.image,
         users.city,
         users.country
-        FROM products, users WHERE products.com_id=users.id AND (city='$city') ORDER BY `products`.`id` DESC limit 12";
+        FROM products, users WHERE products.com_id=users.id AND city='$city' ORDER BY `products`.`id` DESC limit 12";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -253,8 +253,12 @@ class Products_Categories extends DbConnection{
         $userid = $this->con->real_escape_string($userid);
         $product_id = $this->con->real_escape_string($product_id);
         $com_id = $this->con->real_escape_string($com_id);
-        $query = "INSERT INTO `visitors` (p_id, client_id, com_id) VALUES ('$product_id','$userid','$com_id')";
+        
+        $date=date('Y-m-d');
+
+        $query = "INSERT INTO `visitors` (p_id, client_id, com_id,create_at,update_at) VALUES ('$product_id','$userid','$com_id','$date','$date')";
         $sql = $this->con->query($query);
+        
     }
     // add order
     public function addTheOrder($userid,$product_id,$quantity)
@@ -262,7 +266,10 @@ class Products_Categories extends DbConnection{
         $userid = $this->con->real_escape_string($userid);
         $product_id = $this->con->real_escape_string($product_id);
         $quantity = $this->con->real_escape_string($quantity);
-        $query = "INSERT INTO `carts` (p_id, client_id, quantity,is_complete) VALUES ('$product_id','$userid','$quantity','no')";
+        
+        $date=date('Y-m-d');
+
+        $query = "INSERT INTO `carts` (p_id, client_id, quantity,is_complete,create_at,update_at) VALUES ('$product_id','$userid','$quantity','no','$date','$date')";
         $sql = $this->con->query($query);
     }
     // delete order

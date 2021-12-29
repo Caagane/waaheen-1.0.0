@@ -253,6 +253,10 @@ $(document).ready(function () {
 		var p_desc = $('#p_desc').val();
 		var category = $('#category').val();
 		var com_id = $('#com_id').val();
+        
+        document.getElementById('insertProduct').style.pointerEvents = 'none';
+        document.getElementById('insertProduct').style.opacity = '50%';
+
 		if(p_name !='' && p_desc !='' && p_price !='' && category !='' && com_id !=''){
             var addProductForm = new FormData(this.form);
 			$.ajax({
@@ -273,6 +277,9 @@ $(document).ready(function () {
 						$('#addProductForm')[0].reset();
                         $('#add_p_msg').html(response);
                     }
+        
+                    document.getElementById('insertProduct').style.pointerEvents = 'visible';
+                    document.getElementById('insertProduct').style.opacity = '100%';
 				}
 			});
 		}

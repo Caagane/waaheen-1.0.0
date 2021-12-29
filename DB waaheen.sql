@@ -11,6 +11,7 @@ CREATE TABLE users (
     image varchar(225),
     type varchar(225),
     login_type varchar(25),
+    plan varchar(25),
     subscription_period DATE DEFAULT NULL,
     create_at DATETIME DEFAULT NOW(),
     update_at DATETIME DEFAULT NOW()

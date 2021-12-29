@@ -10,7 +10,7 @@
                 <div class="d-flex py-2">
                     <div id="clientWrapper">
                         <button class="btn btn-light px-4 mx-1" id="client" style="display:none;"> <i class="fa fa-plus"></i> Client </button>
-                        <button class="btn btn-danger px-4 mx-1" id="unClient" style="display:none; background:red"> <i class="fa fa-times"></i> Un Client </button>
+                        <button class="btn btn-danger px-4 mx-1 bg-danger border" id="unClient" style="display:none;> <i class="fa fa-times"></i> Un Client </button>
                     </div>
                     <button class="btn btn-light px-2 mx-1" id="showMessageModel"> <i class="fa fa-comment"></i> Message </button>
                 </div>

@@ -212,7 +212,7 @@
 									}
 									?>
 								<div class="px-2 ">
-									<h6><?php echo $SearchProduct['f_name'].' '.$SearchProduct['l_name']; ?></h6>
+									<h6><?php echo $SearchProduct['f_name'] ?></h6>
 									<p style="margin-top: -6px"> <i class="fa fa-map-marker-alt"></i> <?php echo $SearchProduct['city']; ?></p>
 								</div>
 							</div>

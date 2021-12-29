@@ -14,7 +14,7 @@ class Users extends DbConnection{
         $city = $this->con->real_escape_string($city);
         $country = $this->con->real_escape_string($country);
         $userid = $this->con->real_escape_string($userid);
-        $query = "SELECT * FROM `users` WHERE type='company' AND city='$city' AND id!='$userid' ORDER BY `users`.`id` desc limit 6";
+        $query = "SELECT * FROM `users` WHERE id!='$userid' AND `type`='company' AND city='$city'  ORDER BY `users`.`id` desc limit 6";
         $result = $this->con->query($query);
         if ($result->num_rows >= 1) {
             $data = array();
@@ -379,6 +379,24 @@ class Users extends DbConnection{
             return false;
         }
     }
+    // new order
+    public function newOrders($userid,$p_id)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $p_id = $this->con->real_escape_string($p_id);
+        $query = "SELECT * FROM `carts` WHERE p_id='$p_id' AND `client_id`!='$userid'";
+        $result = $this->con->query($query);
+        
+        if ($result->num_rows > 0) {
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($result->num_rows < 1){
+            return false;
+        }
+    }
     // Add new notification
     public function addNotification($userid,$noti_id,$date,$type)
     {
@@ -494,5 +512,34 @@ class Users extends DbConnection{
         }
     }
 
+
+    // Location Updates
+    public function userLocation($userid,$country,$city)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $country = $this->con->real_escape_string($country);
+        $city = $this->con->real_escape_string($city);
+        $query = "UPDATE users SET country='$country', city='$city' WHERE id='$userid'";
+        $sql = $this->con->query($query);
+
+    }
+
+    // current user
+    public function me($userid)
+    {
+        $userid = $this->con->real_escape_string($userid);
+        $query = "SELECT * FROM users WHERE id='$userid'";
+        $sql = $this->con->query($query);
+        if ($sql->num_rows > 0) {
+            $data = array();
+            while ($row = $sql->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else if($sql->num_rows < 1){
+            return false;
+        }
+
+    }
 
 }

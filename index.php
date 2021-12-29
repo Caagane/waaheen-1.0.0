@@ -77,7 +77,7 @@
       </div>
 
 
-
+      
 
       <div class="container px-lg-5 mb-5">
           <h4 class="col-md-12 text-center fw-bold"> <i class="fa fa-gifts"></i> Trending Products in <span style="color: #5900ff;"><?php echo $city; ?></span> </h4>

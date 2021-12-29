@@ -49,8 +49,8 @@
 		$localCompanies = $usersOj->trendingCompanies($city,$country,$userid); 
 		if (!$localCompanies) {
 			?>
-			<i class="fa fa-city " style="font-size:50px;"></i>
-			<h5 class="p-1 px-3 py-lg-3"> There is no Company in Your Local Area !!!</h5>
+			<i class="fa fa-city text-center my-1 " style="font-size:50px;"></i>
+			<h5 class="p-1 px-3 py-lg-3 text-center my-1"> There is no Company in Your Local Area !!!</h5>
 			<?php
 		} else{
 			foreach ($localCompanies as $localCompany) {
@@ -233,8 +233,8 @@
 							</div>
 
 							<div class="col-md-8 col-sm-12 px-3 float-md-end text-center text-md-start justify-content-center justify-items-center">
-								<h5 class="mt-2"><?php echo $carts['p_name']; ?></h5>
-								<h6><?php echo $carts['p_price']; ?></h6>
+								<h6 class="mt-2"><?php echo $carts['p_name']; ?></h6>
+								<h5>$<?php echo $carts['p_price']; ?></h5>
 
 								<a href="products-details.php?productid=<?php echo $carts['id']; ?>&com_id=<?php echo $carts['com_id']; ?>&com-f-name=<?php echo $carts['f_name']; ?>&com-l-name=<?php echo $carts['l_name']; ?>&product-name=<?php echo $carts['p_name']; ?>&product-price=<?php echo $carts['p_price']; ?>&product-desc=<?php echo $carts['p_desc']; ?>&product-img=<?php echo $carts['p_img']; ?>&category=<?php echo $carts['category']; ?>" class="btn btn-primary custom-color px-4 text-center">Update Order</a>
 							</div>
@@ -422,6 +422,13 @@
 		else {
 			foreach ($notifications as $notification) {
 				$com_id = $notification['com_id'];
+
+				// $date=date('Y-m-j');
+				// $time=date('g:i:s');
+			  
+				// $fulldate = $date.' '.$time;
+
+				
 				// fetch all products
 				$newProducts = $usersOj->newProduct($userid,$com_id);
 				if (!empty($newProducts)) {
@@ -429,7 +436,10 @@
 						$noti_id = $newProduct['id'];
 						$date = $newProduct['create_at'];
 						$type = 'new product';
-						$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+						// if when client become a client greater then when company uploads product
+						if ($newProduct['create_at'] > $notification['create_at']) {
+							$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+						}
 					}
 				}
 
@@ -468,6 +478,29 @@
 				$date = $newClient['create_at'];
 				$type = 'new client';
 				$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+			}
+		}
+
+		// first fetch all Products
+		$newProductOrder = $usersOj->myProducts($userid);
+		if (!$newProductOrder) {
+		}
+		else {
+			// then send to the class to check new Order
+			foreach ($newProductOrder as $order) {
+				$p_id = $order['id'];
+				$newOrders = $usersOj->newOrders($userid,$p_id);
+				if (!empty($newOrders)) {
+					// if there is a new Order then insert into notification table
+					foreach ($newOrders as $newOrder) {
+						$noti_id = $newOrder['id'];
+						$date = $newOrder['create_at'];
+						$type = 'new order';
+						$addNotification = $usersOj->addNotification($userid,$noti_id,$date,$type);
+						echo $noti_id .' A ';
+					}
+				}
+
 			}
 		}
 
@@ -535,6 +568,89 @@
 					</div>
 					<?php
 					}
+				}
+			}
+		}
+		
+	}
+
+	// update user location in DB
+	if(isset($_POST['userLocation'])) {
+		$userid = $_POST['userid'];
+		$country = $_POST['country'];
+		$city = $_POST['city'];
+		$userLocation = $usersOj->userLocation($userid,$country,$city);
+	}
+
+	// current user
+	if(isset($_POST['me'])) {
+		$userid = $_POST['userid'];
+		$me = $usersOj->me($userid);
+		if (!$me) {
+		} else {
+			foreach ($me as $my_info) { 
+				// $date_today = date("m/d/Y"); 
+				$date_today = date("Y/m/d"); 
+				$period = $my_info['subscription_period'];
+
+				if ($date_today > $period) {
+					echo $period = 'Subscription Expired on '.$period;
+				}
+
+				if ($my_info['plan'] == "Pro Plan") {
+				?>
+					<script>
+
+						analyzingProducts();
+						analyzingOrders();
+						analyzingVisitors();
+						document.getElementById('companyContainer').style.display = 'block';
+						document.getElementById('proPlan').style.display = 'block';
+						
+						$('.plan').text('<?php echo $my_info['plan'];?>');
+						$('.sub_time').text('<?php echo $period;?>');
+
+					</script>
+				<?php
+				}
+				if ($my_info['plan'] == "Basic Plan") {
+				?>
+					<script>
+						document.getElementById('basicPlanWrapper').style.display = 'block';
+						
+						$('.plan').text('<?php echo $my_info['plan'];?>');
+						$('.sub_time').text('<?php echo $period;?>');
+					</script>
+				<?php
+				}
+				// if no play yet, trail version
+				if ($my_info['plan'] == "") {
+				?>
+					<script>
+						document.getElementById('basicPlanWrapper').style.display = 'block';
+						
+						$('.plan').text(' Trail ');
+						$('.sub_time').text('<?php echo $period;?>');
+					</script>
+				<?php
+				}
+
+
+				if ($my_info['type'] == "company") {
+				?>
+					<script>
+						document.getElementById('menu').style.display = 'block';
+					</script>
+				<?php
+				}
+
+				
+				if ($my_info['type'] != "company") {
+					?>
+						<script>
+							document.getElementById('userContainer').style.display = 'block';
+						</script>
+					<?php
 				}
 			}
 		}

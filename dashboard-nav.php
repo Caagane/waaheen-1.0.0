@@ -1,5 +1,5 @@
 
-    <div class="container px-md-4 my-5 pt-5" >
+    <div class="container px-md-4 my-5 pt-5" id="menu" style="display:none;">
         <h3 class='mb-4 text-center fw-bold'>Business Dashboard</h3>
 
         <div class="row mx-md-1">
